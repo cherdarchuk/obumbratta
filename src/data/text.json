@@ -1,0 +1,88 @@
+{
+  "header": {
+    "title": "Obumbratta: Joey Cherdarchuk’s Portfolio",
+    "description": "Interactive data visualization analysis and design portfolio for Joey Cherdarchuk"
+  },
+  "obumbratta": "Obumbratta",
+  "tagline": "Interactive Data Visualization",
+  "intro": "I design and build <b>interactive visuals</b> with data",
+  "projects": [
+    {
+      "name": "Thunder Roads",
+      "description": "An <b>interactive</b> examination of the 2021 Formula One racing season.",
+      "client": "Obumbratta",
+      "link": "https://f1.obumbratta.com",
+      "link_text": "View Project",
+      "video": "aephin.png",
+      "badge": "iibgold.png",
+      "badge_alt": "Gold winner, Information Is Beautiful Awards",
+      "analysis": "10",
+      "design": "9",
+      "code": "8"
+    },
+    {
+      "name": "Heat Pump Calculator",
+      "description": "An <b>interactive tool</b> comparing the cost of heat pumps to other home heating and cooling options in cities across Canada.",
+      "client": "Canadian Climate Institute",
+      "collab": "in collaboration with <b>Voilà Information Design</b>",
+      "link": "https://heatpumpcalculator.ca/",
+      "link_text": "View Project",
+      "video": "aephin.png",
+      "analysis": "10",
+      "design": "9",
+      "code": "8"
+    },
+    {
+      "name": "Thunder Roads",
+      "description": "An <b>interactive</b> examination of the 2021 Formula One racing season.",
+      "client": "Obumbratta",
+      "link": "https://f1.obumbratta.com",
+      "link_text": "View Project",
+      "video": "aephin.png",
+      "badge": "iibgold.png",
+      "badge_alt": "Gold winner, Information Is Beautiful Awards",
+      "analysis": "10",
+      "design": "9",
+      "code": "8"
+    },
+    {
+      "name": "Thunder Roads",
+      "description": "An <b>interactive</b> examination of the 2021 Formula One racing season.",
+      "client": "Obumbratta",
+      "link": "https://f1.obumbratta.com",
+      "link_text": "View Project",
+      "video": "aephin.png",
+      "badge": "iibgold.png",
+      "badge_alt": "Gold winner, Information Is Beautiful Awards",
+      "analysis": "10",
+      "design": "9",
+      "code": "8"
+    },
+    {
+      "name": "Thunder Roads",
+      "description": "An <b>interactive</b> examination of the 2021 Formula One racing season.",
+      "client": "Obumbratta",
+      "link": "https://f1.obumbratta.com",
+      "link_text": "View Project",
+      "video": "aephin.png",
+      "badge": "iibgold.png",
+      "badge_alt": "Gold winner, Information Is Beautiful Awards",
+      "analysis": "10",
+      "design": "9",
+      "code": "8"
+    },
+    {
+      "name": "Thunder Roads",
+      "description": "An <b>interactive</b> examination of the 2021 Formula One racing season.",
+      "client": "Obumbratta",
+      "link": "https://f1.obumbratta.com",
+      "link_text": "View Project",
+      "video": "aephin.png",
+      "badge": "iibgold.png",
+      "badge_alt": "Gold winner, Information Is Beautiful Awards",
+      "analysis": "10",
+      "design": "9",
+      "code": "8"
+    }
+  ]
+}
