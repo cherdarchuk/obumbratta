@@ -1,0 +1,57 @@
+body {
+	/* Typography */
+	--sans: 'Oxanium', Helvetica, Arial, sans-serif;
+	--mono: Menlo, Consolas, Monaco, "Courier New", monospace;
+
+
+	/* Layers */
+	--z-bottom: 0;
+	--z-middle: 10;
+	--z-top: 20;
+	--z-overlay: 50;
+
+	/* Colours */
+	--brown-100: #eeede6;
+	--brown-200: #d5d2be;
+	--brown-300: #bdb897;
+	--brown-400: #a59e71;
+	--brown-500: #8d854b;
+	--brown-600: #766c2b;
+	--brown-700: #5c5521;
+	--brown-800: #443e19;
+	--brown-900: #2d2910;
+
+	--grey-900: hsl(0, 0%, 10%);
+	--grey-800: hsl(0, 0%, 20%);
+	--grey-700: hsl(0, 0%, 30%);
+	--grey-600: hsl(0, 0%, 40%);
+	--grey-500: hsl(0, 0%, 50%);
+	--grey-400: hsl(0, 0%, 60%);
+	--grey-300: hsl(0, 0%, 70%);
+	--grey-200: hsl(0, 0%, 80%);
+  --grey-150: hsl(0, 0%, 85%);
+	--grey-100: hsl(0, 0%, 90%);
+	
+	--text-colour: var(--grey-800);
+	--back-colour: var(--brown-100);
+	--back-colour-a70: hsla(53, 19%, 92%, 0.7);
+	--highlight-colour: var(--brown-600);
+
+
+
+	/* Body Defaults */
+	font-family: var(--sans);
+	color: var(--text-colour);
+	background-color: var(--back-colour);
+
+}
+
+a {
+	text-decoration: none;
+	color: var(--highlight-colour);
+	font-size: 1rem;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+
+
