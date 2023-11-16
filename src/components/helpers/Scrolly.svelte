@@ -75,7 +75,12 @@
 	});
 </script>
 
-<div bind:this={container}>
+<div class="scrolly" bind:this={container}>
 	<slot />
 </div>
 
+<style>
+	.scrolly {
+		display: flex;
+	}
+</style>
