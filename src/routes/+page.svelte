@@ -2,6 +2,7 @@
 <script>
   import copy from '/src/data/text.json';
   import Scrolly from '../components/helpers/Scrolly.svelte';
+  import Stats from '../components/Stats.svelte';
 
   let scrollIndex = 0;
   $: curProj = updateProj(scrollIndex); 
@@ -26,17 +27,14 @@
     <section id="projects">
       <h2>Projects</h2>
 
-
-          
-      <Scrolly bind:value={scrollIndex}>
-
+      <div class="scrolly">
         <div class="sticky">
           <div class="details">
             <div class="client">{curProj.client}</div>
             <div class="name">{curProj.name}</div>
-            <p>{curProj.analysis}</p>
-            <p>{curProj.design}</p>
-            <p>{curProj.code}</p>
+            <Stats label="Analysis" value={+curProj.analysis} />
+            <Stats label="Design" value={+curProj.design} />
+            <Stats label="Code" value={+curProj.code} />
           </div>
           <div class="ratio">
             <div class="numer">{scrollIndex + 1}</div>
@@ -44,27 +42,34 @@
               <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
               <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
             </svg>
-            <div class="denom">of 7</div>
+            <div class="denom">of {copy.projects.length}</div>
           </div>
         </div>
-
+            
         <div class="scrolling">
-          {#each copy.projects as proj, i}
-            <div class='step' class:active={scrollIndex === i} data-index={i}>
-              {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
-              <div class="video"><img src=/images/{proj.video}/></div>
-              <div class="descrip">{@html proj.description}
-                {#if proj.badge} 
-                  <img src="images/{proj.badge}" alt={proj.badge_alt}/> 
-                {/if}
-              </div>
-              <a href={proj.link} target="_blank">{proj.link_text}</a>
-            </div>
-          {/each}
+          <Scrolly bind:value={scrollIndex}>
+              {#each copy.projects as proj, i}
+                <div class='step' class:active={scrollIndex === i} data-index={i}>
+                  {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
+                  <div class="video"><img src=/images/{proj.video}/></div>
+
+                  <div class="descrip">
+                    <div class="text">{@html proj.description}</div>
+                    {#if proj.badge} 
+                      <div class="badge"><img src="images/{proj.badge}" alt={proj.badge_alt}/></div>
+                    {/if}
+                  </div> 
+                  <a class="proj-link" href={proj.link} target="_blank">
+                      <svg height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
+                      </svg> 
+                      <div>{proj.link_text}</div>
+                  </a>
+                </div>
+              {/each}
+          </Scrolly>
         </div>
-
-      </Scrolly>
-
+      </div>
           
     </section>	
   {/if}
@@ -77,9 +82,6 @@
     <p>Here</p>
 
   </section>
-
-
-  <p><a href="https://f1.obumbratta.com/about">More Information</a></p>
 
 </div>
 
@@ -130,12 +132,19 @@
     border-bottom: 1px solid var(--brown-400);
   }
 
+
+  /* Scrolly formatting */
+
+  .scrolly {
+		display: flex;
+	}
+
   .sticky {
     position: sticky;
     /* top: 15rem;
-    width: 50%;
+    width: 50%; */
     display: flex;
-    justify-content: space-between; */
+    justify-content: space-between;
 
 
     width: 100%;
@@ -152,7 +161,14 @@
   .step {
     min-height: 70vh;
     max-width: 500px;
-    margin: auto;
+    margin-left: auto;
+  }
+
+
+  /* Project and Stats */
+
+  .details {
+    margin-top: 4rem;
   }
 
   .client {
@@ -160,15 +176,19 @@
     color: var(--highlight-colour);
     text-transform: uppercase;
     letter-spacing: 0.2em;
+    margin-bottom: 0.25rem;
   }
   .name {
     font-size: 1.25rem;
     font-weight: bold;
     text-transform: uppercase;
+    margin-bottom: 0.5rem;
   }
 
-  .details {
-  }
+
+
+  /* Ratio Counter */
+
   .ratio {
     width: 200px;
   }
@@ -192,4 +212,44 @@
     margin-left: 5.5rem;
 
   }
+
+
+  /* Project info */
+  .collab {
+    text-align: right;
+    font-size: 0.625rem;
+    font-family: 'Open Sans', sans-serif;
+    margin-bottom: 5px;
+  }
+  .video img {
+    border-radius: 4px;
+    opacity: 0.8;
+    transition: opacity 1s;
+  }
+  .video img:hover {
+    opacity: 1;
+  }
+  .descrip {
+    display: flex;
+    gap: 20px;
+    margin-top: 1rem;
+  }
+  .text {
+    font-size: 1.25rem;
+    line-height: 1.3em;
+  }
+  .badge {
+    flex-shrink: 0;
+  }
+
+  .proj-link {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 6px;
+    margin-top: 1rem;
+  }
+
+
+
 </style>
