@@ -7,14 +7,15 @@
 
 <div class="full-width">
   <div class="header">
-    <div><a href="#home">Home</a></div>
+    <!-- <div><a href="#home">Home</a></div> -->
+    <div></div>
     <svg width="57" height="36" viewBox="0 0 57 36" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M39 1H25L13.48 35.2H27.48L39 1Z" fill="#BDB897"/>
       <path d="M57 1H43L31.48 35.2H45.48L57 1Z" fill="#BDB897"/>
     </svg>
     <nav class="menu">
-      <a href="#projects">Projects</a>
-      <a href="#about">About</a>
+      <!-- <a href="#projects">Projects</a>
+      <a href="#about">About</a> -->
     </nav>
   </div>
 </div>
@@ -26,7 +27,7 @@
   <div class="footer">
       <div></div>
       <div>Joey Cherdarchuk</div>
-      <a href="mailto:joey@obumbratta.com">joey@obumbratta.com</a>
+      <a target="_blank" href="mailto:joey@obumbratta.com">joey@obumbratta.com</a>
       <div></div>
   </div>
 </div>
@@ -72,7 +73,7 @@
     justify-content: space-around;
     align-items: center;
     height: 40px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--open);
   }
   .footer a, .footer div{
     color: var(--brown-100);

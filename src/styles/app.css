@@ -1,7 +1,7 @@
 body {
 	/* Typography */
 	--sans: 'Oxanium', Helvetica, Arial, sans-serif;
-	--mono: Menlo, Consolas, Monaco, "Courier New", monospace;
+	--open: 'Open Sans', Helvetica, Arial, sans-serif;
 
 
 	/* Layers */
@@ -49,9 +49,6 @@ body {
 a {
 	text-decoration: none;
 	color: var(--highlight-colour);
-	font-size: 1rem;
-	letter-spacing: 0.05em;
-	text-transform: uppercase;
 }
 
 

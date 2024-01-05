@@ -1,3 +1,6 @@
+# Copy Doc
+https://docs.google.com/document/d/1LmJ50mgkjDUqAq44faZrn6mRkmmORSTi8swsyqHMynw/edit
+
 # ArchieML
 http://127.0.0.1:6006/1LmJ50mgkjDUqAq44faZrn6mRkmmORSTi8swsyqHMynw
 
