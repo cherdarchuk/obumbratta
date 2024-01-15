@@ -3,6 +3,7 @@
   import copy from '/src/data/text.json';
   import Scrolly from '../components/helpers/Scrolly.svelte';
   import Stats from '../components/Stats.svelte';
+  import mq from '../stores/mq.js'; 
 
   let scrollIndex = 0;
   $: curProj = updateProj(scrollIndex); 
@@ -15,7 +16,7 @@
   $: console.log(curProj);
 </script>
   
-<div class="container">  
+<div class="container {$mq.classNames}">  
   <div class="obumbratta">{copy.obumbratta}</div>
   <h3>{copy.tagline}</h3>
 
@@ -25,51 +26,94 @@
 
   {#if scrollIndex !== undefined}
     <section id="projects">
-      <h2>Projects</h2>
+      <h2 class="{$mq.classNames}">Projects</h2>
 
-      <div class="scrolly">
-        <div class="sticky">
-          <div class="details">
-            <div class="client">{curProj.client}</div>
-            <div class="name">{curProj.name}</div>
-            <Stats label="Analysis" value={+curProj.analysis} />
-            <Stats label="Design" value={+curProj.design} />
-            <Stats label="Code" value={+curProj.code} />
+      {#if !$mq.mobile}
+        <div class="scrolly">
+          <div class="sticky">
+            <div class="details">
+              <div class="client">{curProj.client}</div>
+              <div class="name">{curProj.name}</div>
+              <Stats label="Analysis" value={+curProj.analysis} />
+              <Stats label="Design" value={+curProj.design} />
+              <Stats label="Code" value={+curProj.code} />
+            </div>
+            <div class="ratio">
+              <div class="numer">{scrollIndex + 1}</div>
+              <svg class="slash" width="112" height="295" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
+                <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
+              </svg>
+              <div class="denom">of {copy.projects.length}</div>
+            </div>
           </div>
-          <div class="ratio">
-            <div class="numer">{scrollIndex + 1}</div>
-            <svg class="slash" width="112" height="295" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
-              <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
-            </svg>
-            <div class="denom">of {copy.projects.length}</div>
+              
+          <div class="scrolling">
+            <Scrolly bind:value={scrollIndex}>
+                {#each copy.projects as proj, i}
+                  <div class='step' class:active={scrollIndex === i} data-index={i}>
+                    {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
+                    <div class="video"><img src=/images/{proj.video}/></div>
+
+                    <div class="descrip">
+                      <div class="text">{@html proj.description}</div>
+                      {#if proj.badge} 
+                        <div class="badge"><img src="images/{proj.badge}" alt={proj.badge_alt}/></div>
+                      {/if}
+                    </div> 
+                    <a class="proj-link" href={proj.link} target="_blank">
+                        <svg height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
+                        </svg> 
+                        <div>{proj.link_text}</div>
+                    </a>
+                  </div>
+                {/each}
+            </Scrolly>
           </div>
         </div>
-            
-        <div class="scrolling">
-          <Scrolly bind:value={scrollIndex}>
-              {#each copy.projects as proj, i}
-                <div class='step' class:active={scrollIndex === i} data-index={i}>
-                  {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
-                  <div class="video"><img src=/images/{proj.video}/></div>
+      {:else}
+        {#each copy.projects as proj, i}
+          <div class="mobile">
+            <div class="mobile-details">
+              <div class="details">
+                <div class="client">{proj.client}</div>
+                <div class="name">{proj.name}</div>
+                <Stats label="Analysis" value={+proj.analysis} />
+                <Stats label="Design" value={+proj.design} />
+                <Stats label="Code" value={+proj.code} />
+              </div>
+              <div class="ratio">
+                <div class="numer">{i+1}</div>
+                <svg class="slash" width="60" height="138" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
+                  <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
+                </svg>
+                <div class="denom">of {copy.projects.length}</div>
+              </div>
+            </div>
 
-                  <div class="descrip">
-                    <div class="text">{@html proj.description}</div>
-                    {#if proj.badge} 
-                      <div class="badge"><img src="images/{proj.badge}" alt={proj.badge_alt}/></div>
-                    {/if}
-                  </div> 
-                  <a class="proj-link" href={proj.link} target="_blank">
-                      <svg height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
-                      </svg> 
-                      <div>{proj.link_text}</div>
-                  </a>
-                </div>
-              {/each}
-          </Scrolly>
-        </div>
-      </div>
+            <div class="active proj-section">
+              {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
+              <div class="video"><img src=/images/{proj.video}/></div>
+
+              <div class="descrip">
+                <div class="text">{@html proj.description}</div>
+                {#if proj.badge} 
+                  <div class="badge"><img src="images/{proj.badge}" alt={proj.badge_alt}/></div>
+                {/if}
+              </div> 
+              <a class="proj-link" href={proj.link} target="_blank">
+                  <svg height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
+                  </svg> 
+                  <div>{proj.link_text}</div>
+              </a>
+            </div>
+          </div>
+          <div class="break"></div>
+        {/each}
+      {/if}
           
     </section>	
   {/if}
@@ -110,6 +154,9 @@
     margin: 70px auto 40px;
     padding: 0 40px;
   }
+  .mq-mobile.container {
+    padding: 0 24px;
+  }
 
   h1 {
     text-align: center;
@@ -135,6 +182,11 @@
     position: sticky;
     top: 70px;
     margin-bottom: 3rem;
+  }
+
+  h2.mq-mobile{
+    position: relative;
+    top: 0;
   }
 
 
@@ -182,6 +234,10 @@
     margin-left: auto;
   }
 
+  .mobile .proj-section {
+    margin-bottom: 3rem;
+  }
+
 
   /* Project and Stats */
 
@@ -203,7 +259,10 @@
     margin-bottom: 0.5rem;
   }
 
-
+  .mobile .details{
+     margin-top: 1rem;
+     margin-bottom: 1rem;
+  }
 
   /* Ratio Counter */
 
@@ -228,7 +287,23 @@
     position: absolute;
     margin-top: 200px;
     margin-left: 5.5rem;
+    font-weight: bold;
+  }
 
+
+  .mobile .ratio{
+    width: 78px;
+  }
+  .mobile .numer{
+    margin-top: 10px;
+    font-size: 6rem;
+  }
+  .mobile .slash {
+    margin-left: 1rem;
+  }
+  .mobile .denom{
+    margin-top: 88px;
+    margin-left: 3rem;
   }
 
 
@@ -256,6 +331,9 @@
     font-size: 1.25rem;
     line-height: 1.3em;
   }
+  .mobile .text{
+    font-size: 1rem;;
+  }
   .badge {
     flex-shrink: 0;
   }
@@ -269,6 +347,11 @@
   	font-size: 1rem;
   	letter-spacing: 0.05em;
   	text-transform: uppercase;
+  }
+
+  .mobile-details {
+    display: flex;
+    justify-content: space-between;
   }
 
 

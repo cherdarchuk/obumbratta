@@ -54,10 +54,11 @@
     justify-content: end;
     align-items: center;
     gap: 30px;
-    min-width: 220px
+    min-width: 20px; 
+    /* may have to change this and the width below if you add back a nav menu*/
   }
   .header div {
-    min-width: 220px
+    min-width: 20px
   }
   
 
