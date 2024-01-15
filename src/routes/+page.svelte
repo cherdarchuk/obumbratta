@@ -30,7 +30,7 @@
 
       {#if !$mq.mobile}
         <div class="scrolly">
-          <div class="sticky">
+          <div class="sticky" class:mobile={$mq.tablet}>
             <div class="details">
               <div class="client">{curProj.client}</div>
               <div class="name">{curProj.name}</div>
@@ -40,7 +40,7 @@
             </div>
             <div class="ratio">
               <div class="numer">{scrollIndex + 1}</div>
-              <svg class="slash" width="112" height="295" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg class="slash" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
                 <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
               </svg>
@@ -85,7 +85,7 @@
               </div>
               <div class="ratio">
                 <div class="numer">{i+1}</div>
-                <svg class="slash" width="60" height="138" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg class="slash" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
                   <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
                 </svg>
@@ -224,6 +224,12 @@
     left: 0;
   }
 
+  .mobile.sticky{
+    flex-direction: column;
+    justify-content: flex-start;
+
+  }
+
   .scrolling {
     width: 100%;
 
@@ -267,12 +273,11 @@
   /* Ratio Counter */
 
   .ratio {
-    width: 200px;
+    width: 185px;
   }
 
   .numer {
     position: absolute;
-    margin-top: 25px;
     color: var(--back-colour);
     text-shadow:  1px 1px 0 var(--highlight-colour), -1px 1px 0 var(--highlight-colour), -1px -1px 0 var(--highlight-colour), 1px -1px 0 var(--highlight-colour);
     font-family: var(--open);
@@ -281,12 +286,13 @@
   }
   .slash {
     position: absolute;
-    margin-left: 2rem
+    margin-left: 2rem;
+    width: 100px;
   }
   .denom {
     position: absolute;
-    margin-top: 200px;
-    margin-left: 5.5rem;
+    margin-top: 180px;
+    margin-left: 5rem;
     font-weight: bold;
   }
 
@@ -300,6 +306,8 @@
   }
   .mobile .slash {
     margin-left: 1rem;
+    width: 60px;
+    height: 138px;
   }
   .mobile .denom{
     margin-top: 88px;
