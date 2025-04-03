@@ -39,6 +39,8 @@
       "link": "https://heatpumpcalculator.ca/",
       "link_text": "View Project",
       "video": "heat-pumps.png",
+      "badge": "2025_bw_webby_honoree.png",
+      "badge_alt": "Webby Awards Honoree, Best User Experience",
       "analysis": "2",
       "design": "7",
       "code": "9"
@@ -102,6 +104,13 @@
       "analysis": "1",
       "design": "10",
       "code": "1"
+    }
+  ],
+  "animation": [
+    {
+      "img": "Data Looks Better Naked",
+      "alt": "Data Looks Better Naked",
+      "description": "A seri"
     }
   ]
 }

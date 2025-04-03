@@ -51,7 +51,7 @@
                 {#each copy.projects as proj, i}
                   <div class='step' class:active={scrollIndex === i} data-index={i}>
                     {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
-                    <div class="video"><img src=/images/{proj.video}  alt="Screenshot of {proj.name}"/></div>
+                    <div class="video"><img src=/images/{proj.video}/></div>
 
                     <div class="descrip">
                       <div class="text">{@html proj.description}</div>
@@ -93,7 +93,7 @@
 
             <div class="active proj-section">
               {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
-              <div class="video"><img src=/images/{proj.video} alt="Screenshot of {proj.name}"/></div>
+              <div class="video"><img src=/images/{proj.video}/></div>
 
               <div class="descrip">
                 <div class="text">{@html proj.description}</div>
