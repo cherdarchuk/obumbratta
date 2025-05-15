@@ -1,16 +1,9 @@
 
 <script>
   import copy from '/src/data/text.json';
-  import Scrolly from '$lib/components/helpers/Scrolly.svelte';
-  import Stats from '$lib/components/Stats.svelte';
   import mq from '$lib/stores/mq.js'; 
 
-  let scrollIndex = 0;
-  $: curProj = updateProj(scrollIndex); 
-  
-  function updateProj (i) {
-    return copy.projects[i];
-  }
+  let text = copy.animation;
   
 </script>
   
@@ -19,103 +12,19 @@
   <h3>{copy.tagline}</h3>
 
   <div class="break"></div>
-  <h1>{@html copy.intro}</h1>
+  <h1>{@html text.title}</h1>
   <div class="break"></div>
 
-  {#if scrollIndex !== undefined}
-    <section id="projects">
-      <h2 class="{$mq.classNames}">Projects</h2>
 
-      {#if !$mq.mobile}
-        <div class="scrolly">
-          <div class="sticky" class:mobile={$mq.tablet}>
-            <div class="details">
-              <div class="client">{curProj.client}</div>
-              <div class="name">{curProj.name}</div>
-              <Stats label="Analysis" value={+curProj.analysis} />
-              <Stats label="Design" value={+curProj.design} />
-              <Stats label="Code" value={+curProj.code} />
-            </div>
-            <div class="ratio">
-              <div class="numer">{scrollIndex + 1}</div>
-              <svg class="slash" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
-                <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
-              </svg>
-              <div class="denom">of {copy.projects.length}</div>
-            </div>
+    <section id="animation">
+          <div class='step'>
+            <blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:jt65vu3tx736jruey6fx2hs2/app.bsky.feed.post/3lp7khabk4k2m" data-bluesky-cid="bafyreicjx5f7kenq3qfb2ap5nmaot66h42pzuayde5id2ac5dbjbe5bege" data-bluesky-embed-color-mode="dark"><p lang="en">What is #dataviz animation good for? An updated thread with examples.<br><br><a href="https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2/post/3lp7khabk4k2m?ref_src=embed">[image or embed]</a></p>&mdash; Joey Cherdarchuk - Obumbratta (<a href="https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2?ref_src=embed">@obumbratta.com</a>) <a href="https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2/post/3lp7khabk4k2m?ref_src=embed">May 15, 2025 at 6:50 AM</a></blockquote><script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
           </div>
-              
-          <div class="scrolling">
-            <Scrolly bind:value={scrollIndex}>
-                {#each copy.projects as proj, i}
-                  <div class='step' class:active={scrollIndex === i} data-index={i}>
-                    {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
-                    <div class="video"><img src=/images/{proj.video}/></div>
-
-                    <div class="descrip">
-                      <div class="text">{@html proj.description}</div>
-                      {#if proj.badge} 
-                        <div class="badge"><img src="images/{proj.badge}" alt={proj.badge_alt}/></div>
-                      {/if}
-                    </div> 
-                    <a class="proj-link" href={proj.link} target="_blank">
-                        <svg height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
-                        </svg> 
-                        <div>{proj.link_text}</div>
-                    </a>
-                  </div>
-                {/each}
-            </Scrolly>
-          </div>
-        </div>
-      {:else}
-        {#each copy.projects as proj, i}
-          <div class="mobile">
-            <div class="mobile-details">
-              <div class="details">
-                <div class="client">{proj.client}</div>
-                <div class="name">{proj.name}</div>
-                <Stats label="Analysis" value={+proj.analysis} />
-                <Stats label="Design" value={+proj.design} />
-                <Stats label="Code" value={+proj.code} />
-              </div>
-              <div class="ratio">
-                <div class="numer">{i+1}</div>
-                <svg class="slash" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
-                  <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
-                </svg>
-                <div class="denom">of {copy.projects.length}</div>
-              </div>
-            </div>
-
-            <div class="active proj-section">
-              {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
-              <div class="video"><img src=/images/{proj.video}/></div>
-
-              <div class="descrip">
-                <div class="text">{@html proj.description}</div>
-                {#if proj.badge} 
-                  <div class="badge"><img src="images/{proj.badge}" alt={proj.badge_alt}/></div>
-                {/if}
-              </div> 
-              <a class="proj-link" href={proj.link} target="_blank">
-                  <svg height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
-                  </svg> 
-                  <div>{proj.link_text}</div>
-              </a>
-            </div>
-          </div>
-          <div class="break"></div>
-        {/each}
-      {/if}
-          
+         
     </section>	
-  {/if}
   
+  
+
   
   <section>
     <h2>Contact</h2>
@@ -163,6 +72,7 @@
     font-size: 3.75rem;
     max-width: 800px;
     margin: auto;
+    letter-spacing: -0.05em;
   }
 
   h2, .obumbratta {
@@ -175,13 +85,14 @@
     margin: auto;
     padding: 8px 6px 4px 10px;
     border-radius: 3px ;
-    background-color: var(--back-colour-a70);
+    background-color: var(--back-colour);
   }
 
   h2 {
     position: sticky;
     top: 70px;
     margin-bottom: 3rem;
+    width: 100%;
   }
 
   h2.mq-mobile{
@@ -205,39 +116,10 @@
 
   /* Scrolly formatting */
 
-  .scrolly {
-		display: flex;
-	}
-
-  .sticky {
-    position: sticky;
-    /* top: 15rem;
-    width: 50%; */
-    display: flex;
-    justify-content: space-between;
-
-
-    width: 100%;
-    height: 50vh;
-    margin: 0;
-    top: 25vh;
-    left: 0;
-  }
-
-  .mobile.sticky{
-    flex-direction: column;
-    justify-content: flex-start;
-
-  }
-
-  .scrolling {
-    width: 100%;
-
-  }
-  .step {
+    .step {
     min-height: 70vh;
     max-width: 500px;
-    margin-left: auto;
+    margin: auto;
   }
 
   .mobile .proj-section {

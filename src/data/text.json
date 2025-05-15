@@ -106,11 +106,20 @@
       "code": "1"
     }
   ],
-  "animation": [
-    {
-      "img": "Data Looks Better Naked",
-      "alt": "Data Looks Better Naked",
-      "description": "A seri"
-    }
-  ]
+  "animation": {
+    "title": "<strong>What is animation good for?</strong>",
+    "slides": [
+      {
+        "img": "show_time.png",
+        "alt": "Text that says \"SHOW TIME\" with an animated clock hand circling in the letter \"O\"",
+        "description": "The most common and intuitive use for animation in visualization is to show time.",
+        "header": "Show Time"
+      },
+      {
+        "img": "thunder-roads.png",
+        "alt": "Text that says \"SHOW TIME\" with an animated clock hand circling in the letter \"O\"",
+        "description": "An <b>interactive story</b> examining the races of the 2021 Formula One racing season."
+      }
+    ]
+  }
 }
