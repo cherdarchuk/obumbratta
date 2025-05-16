@@ -14,6 +14,7 @@
       "link": "https://f1.obumbratta.com",
       "link_text": "View Project",
       "video": "thunder-roads.png",
+      "alt": "A screenshot of the thunder roads lightning plot visualization where you can see a red line representing Max Verstappen winning the race in Bahrain.",
       "badge": "iibgold.png",
       "badge_alt": "Gold winner, Information Is Beautiful Awards",
       "analysis": "3",
@@ -27,6 +28,7 @@
       "link": "https://usafacts.org/data-projects/housing-vs-wages",
       "link_text": "View Project",
       "video": "usa-facts.png",
+      "alt": "A map of US counties with triangle for each county representing the growth in home prices relative to the growth in wages. Home price growth has outstripped wages in almost every county.",
       "analysis": "7",
       "design": "9",
       "code": "8"
@@ -39,6 +41,7 @@
       "link": "https://heatpumpcalculator.ca/",
       "link_text": "View Project",
       "video": "heat-pumps.png",
+      "alt": "A screenshot of the heat pump calculator tool with title \"How heat pumps pay off: Comparing heating and cooling options across Canada\" Many small dots encircle an icon representing a heat pump.",
       "badge": "2025_bw_webby_honoree.png",
       "badge_alt": "Webby Awards Honoree, Best User Experience",
       "analysis": "2",
@@ -53,6 +56,7 @@
       "link": "https://www.opportunityatlas.org/",
       "link_text": "View Project",
       "video": "opp-atlas.png",
+      "alt": "A screenshot of the opportunity atlas. Map is zoomed in on New York, NY and shows the relatively high median rents in the area.",
       "analysis": "1",
       "design": "9",
       "code": "5"
@@ -64,6 +68,7 @@
       "link": "https://www.darkhorseanalytics.com/blog/breathing-city",
       "link_text": "View Project",
       "video": "breathing-city.gif",
+      "alt": "A cropped top half of Manhattan animated map showing at work and at home population by the hour across the different building footprints of the city.",
       "badge": "iibshortlist.png",
       "badge_alt": "Shortlist, Information Is Beautiful Awards, 2014",
       "analysis": "10",
@@ -78,6 +83,7 @@
       "link": "https://www.tracktherecovery.org/",
       "link_text": "View Project",
       "video": "econ-tracker.png",
+      "alt": "A screenshot of the economic tracker tool showing the percent change in employment prior to and post COVID. Three lines show High, Middle, and Low wage employment change. High and Middle wage employment has returned to, or exceed, pre-COVID levels, but low wage employment is still considerably lower.",
       "analysis": "1",
       "design": "10",
       "code": "2"
@@ -90,6 +96,7 @@
       "link": "http://aephin.alberta.ca/water/water-map.htm",
       "link_text": "View Project",
       "video": "aephin.png",
+      "alt": "A screenshot of the AEPHIN Well Water Quality Dashboard showing the distribution of Multiple well testing measurements, along with a timeline and a map displaying the test results for a specific measurement in this case \"Conductivity\"",
       "analysis": "4",
       "design": "9",
       "code": "6"
@@ -101,25 +108,17 @@
       "link": "https://www.darkhorseanalytics.com/portfolio-data-looks-better-naked",
       "link_text": "View Project",
       "video": "data-naked.png",
+      "alt": "Before and after visual of a simple bar chart plotting the calories per 100g of  5 different foods. The first chart has lots of distracting colours, lines, and redundant elements. The second is stripped down and much cleaner and easier to read.",
       "analysis": "1",
       "design": "10",
       "code": "1"
     }
   ],
-  "animation": {
-    "title": "<strong>What is animation good for?</strong>",
-    "slides": [
-      {
-        "img": "show_time.png",
-        "alt": "Text that says \"SHOW TIME\" with an animated clock hand circling in the letter \"O\"",
-        "description": "The most common and intuitive use for animation in visualization is to show time.",
-        "header": "Show Time"
-      },
-      {
-        "img": "thunder-roads.png",
-        "alt": "Text that says \"SHOW TIME\" with an animated clock hand circling in the letter \"O\"",
-        "description": "An <b>interactive story</b> examining the races of the 2021 Formula One racing season."
-      }
-    ]
-  }
+  "threads_title": "Social Media Threads",
+  "threads": [
+    {
+      "title": "What is animation good for?",
+      "embed": "<blockquote class=\"bluesky-embed\" data-bluesky-uri=\"at://did:plc:jt65vu3tx736jruey6fx2hs2/app.bsky.feed.post/3lp7khabk4k2m\" data-bluesky-cid=\"bafyreicjx5f7kenq3qfb2ap5nmaot66h42pzuayde5id2ac5dbjbe5bege\" data-bluesky-embed-color-mode=\"dark\"><p lang=\"en\">What is #dataviz animation good for? An updated thread with examples.<br><br><a href=\"https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2/post/3lp7khabk4k2m?ref_src=embed\">[image or embed]</a></p>&mdash; Joey Cherdarchuk - Obumbratta (<a href=\"https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2?ref_src=embed\">@obumbratta.com</a>) <a href=\"https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2/post/3lp7khabk4k2m?ref_src=embed\">May 15, 2025 at 6:50 AM</a></blockquote><script async src=\"https://embed.bsky.app/static/embed.js\" charset=\"utf-8\"></script>"
+    }
+  ]
 }

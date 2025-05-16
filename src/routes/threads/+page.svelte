@@ -3,7 +3,7 @@
   import copy from '/src/data/text.json';
   import mq from '$lib/stores/mq.js'; 
 
-  let text = copy.animation;
+  let text = copy.threads;
   
 </script>
   
@@ -12,16 +12,18 @@
   <h3>{copy.tagline}</h3>
 
   <div class="break"></div>
-  <h1>{@html text.title}</h1>
+  <h1>{@html copy.threads_title}</h1>
   <div class="break"></div>
 
-
+  {#each copy.threads as text}
     <section id="animation">
-          <div class='step'>
-            <blockquote class="bluesky-embed" data-bluesky-uri="at://did:plc:jt65vu3tx736jruey6fx2hs2/app.bsky.feed.post/3lp7khabk4k2m" data-bluesky-cid="bafyreicjx5f7kenq3qfb2ap5nmaot66h42pzuayde5id2ac5dbjbe5bege" data-bluesky-embed-color-mode="dark"><p lang="en">What is #dataviz animation good for? An updated thread with examples.<br><br><a href="https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2/post/3lp7khabk4k2m?ref_src=embed">[image or embed]</a></p>&mdash; Joey Cherdarchuk - Obumbratta (<a href="https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2?ref_src=embed">@obumbratta.com</a>) <a href="https://bsky.app/profile/did:plc:jt65vu3tx736jruey6fx2hs2/post/3lp7khabk4k2m?ref_src=embed">May 15, 2025 at 6:50 AM</a></blockquote><script async src="https://embed.bsky.app/static/embed.js" charset="utf-8"></script>
-          </div>
+      <h2 class="mq-mobile">{text.title}</h2>
+      <div class='step'>
+        {@html text.embed}
+      </div>
+    </section>
+  {/each}
          
-    </section>	
   
   
 
@@ -91,7 +93,7 @@
   h2 {
     position: sticky;
     top: 70px;
-    margin-bottom: 3rem;
+    margin-bottom: 1rem;
     width: 100%;
   }
 
@@ -117,14 +119,11 @@
   /* Scrolly formatting */
 
     .step {
-    min-height: 70vh;
     max-width: 500px;
     margin: auto;
-  }
-
-  .mobile .proj-section {
     margin-bottom: 3rem;
   }
+
 
 
   /* Project and Stats */
@@ -147,10 +146,6 @@
     margin-bottom: 0.5rem;
   }
 
-  .mobile .details{
-     margin-top: 1rem;
-     margin-bottom: 1rem;
-  }
 
   /* Ratio Counter */
 
@@ -179,22 +174,7 @@
   }
 
 
-  .mobile .ratio{
-    width: 78px;
-  }
-  .mobile .numer{
-    margin-top: 10px;
-    font-size: 6rem;
-  }
-  .mobile .slash {
-    margin-left: 1rem;
-    width: 60px;
-    height: 138px;
-  }
-  .mobile .denom{
-    margin-top: 88px;
-    margin-left: 3rem;
-  }
+
 
 
   /* Project info */
@@ -204,14 +184,7 @@
     font-family: var(--open);
     margin-bottom: 5px;
   }
-  .video img {
-    border-radius: 4px;
-    opacity: 0.8;
-    transition: opacity 1s;
-  }
-  .video img:hover {
-    opacity: 1;
-  }
+ 
   .descrip {
     display: flex;
     gap: 20px;
@@ -220,9 +193,6 @@
   .text {
     font-size: 1.25rem;
     line-height: 1.3em;
-  }
-  .mobile .text{
-    font-size: 1rem;;
   }
   .badge {
     flex-shrink: 0;
@@ -247,7 +217,6 @@
 
   /* Contact Info */
   .contacts {
-    margin-top: -25px;
     display: flex;
     flex-direction: column;
     align-items: center;
