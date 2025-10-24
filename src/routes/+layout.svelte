@@ -68,6 +68,7 @@
     bottom: 0px;
     width: 100%;
     background-color: var(--grey-800);
+    z-index: 99;
   }
   .footer {
     display: flex;
@@ -82,4 +83,5 @@
     letter-spacing: normal;
     text-transform: none;
   }
+
 </style>

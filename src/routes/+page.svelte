@@ -9,7 +9,8 @@
   $: curProj = updateProj(scrollIndex); 
   
   function updateProj (i) {
-    return copy.projects[i];
+    const index = i !== undefined ? i : 0;
+    return copy.projects[index];
   }
   
 </script>
@@ -22,11 +23,10 @@
   <h1>{@html copy.intro}</h1>
   <div class="break"></div>
 
-  {#if scrollIndex !== undefined}
-    <section id="projects">
-      <h2 class="{$mq.classNames}">Projects</h2>
+  <section id="projects">
+    <h2 class="{$mq.classNames}">Projects</h2>
 
-      {#if !$mq.mobile}
+    {#if !$mq.mobile}
         <div class="scrolly">
           <div class="sticky" class:mobile={$mq.tablet}>
             <div class="details">
@@ -37,7 +37,7 @@
               <Stats label="Code" value={+curProj.code} />
             </div>
             <div class="ratio">
-              <div class="numer">{scrollIndex + 1}</div>
+              <div class="numer">{(scrollIndex !== undefined ? scrollIndex : 0) + 1}</div>
               <svg class="slash" viewBox="0 0 112 295" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M99 1H111L13 294H1L99 1Z" fill="#333333"/>
                 <path d="M111 1V294H13L111 1Z" fill="#EEEDE6"/>
@@ -60,7 +60,7 @@
                       {/if}
                     </div> 
                     <a class="proj-link" href={proj.link} target="_blank">
-                        <svg height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <svg style:transform="translateY(-2px)" height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                           <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
                         </svg> 
                         <div>{proj.link_text}</div>
@@ -102,7 +102,7 @@
                 {/if}
               </div> 
               <a class="proj-link" href={proj.link} target="_blank">
-                  <svg height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <svg style:transform="translateY(-2px)" height="24" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
                   </svg> 
                   <div>{proj.link_text}</div>
@@ -114,13 +114,46 @@
       {/if}
           
     </section>	
-  {/if}
   
+  <section>
+    <h2>More Projects</h2>
+    <div class='more-projects'>
+      {#each copy.moreProjects as proj}
+        <div class="small-project">
+          <div class="collab">{@html proj.collab ? proj.collab : " "}</div>
+          <div class="video">
+            {#if proj.video.endsWith('.mp4')}
+              <video width="100%" autoplay muted loop playsinline>
+                <source src="/images/{proj.video}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            {:else}
+              <img src=/images/{proj.video} alt={proj.alt}/>
+            {/if}
+          </div>
+
+          <div class="descrip">
+            <div class="text small">{@html proj.name}</div>
+            {#if proj.badge} 
+              <div class="badge"><img src="images/{proj.badge}" alt={proj.badge_alt}/></div>
+            {/if}
+            <a class="proj-link small" href={proj.link} target="_blank">
+                <svg style:transform="translateY(-1px)" height="12" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
+                </svg> 
+                <div>{proj.link_text}</div>
+            </a>
+          </div> 
+        </div>
+      {/each}
+    </div>
+
+  </section>
   
   <section>
     <h2>Contact</h2>
     <div class='contacts'>
-      <div class='contact-cta'> I create clear and engaging visual tools. Get in touch if you'd like to collaborate.</div>
+      <div class='contact-cta'>{copy.contactText}</div>
       <div class='contact-points'>
         <div><a target="_blank" href="mailto:joey@obumbratta.com">
           <svg role="img"  width="16" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg"><g>
@@ -175,13 +208,15 @@
     margin: auto;
     padding: 8px 6px 4px 10px;
     border-radius: 3px ;
-    background-color: var(--back-colour-a70);
+    background-color: var(--back-colour);
+    width: 100%;
   }
 
   h2 {
     position: sticky;
     top: 70px;
     margin-bottom: 3rem;
+    z-index: 10;
   }
 
   h2.mq-mobile{
@@ -274,6 +309,8 @@
 
   .ratio {
     width: 185px;
+    position: relative;
+    z-index: 1;
   }
 
   .numer {
@@ -296,6 +333,31 @@
     font-weight: bold;
   }
 
+  .more-projects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    max-width: 900px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 6rem;
+  }
+
+  .small-project {
+    display: flex;
+    flex-direction: column;
+    min-width: 175px;
+    max-width: 240px;
+    gap: 4px;
+  }
+
+  .more-projects .descrip {
+    margin-top: 0;
+  }
+
+  .small-project .collab {
+    margin-bottom: 0;
+  }
 
   .mobile .ratio{
     width: 78px;
@@ -322,18 +384,31 @@
     font-family: var(--open);
     margin-bottom: 5px;
   }
-  .video img {
+  .video {
+    width: 100%;
+    overflow: hidden;
+    border-radius: 4px;
+  }
+  .video img,
+  .video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     border-radius: 4px;
     opacity: 0.8;
     transition: opacity 1s;
   }
-  .video img:hover {
+  .video img:hover,
+  .video video:hover {
     opacity: 1;
   }
   .descrip {
     display: flex;
+    justify-content: space-between;
     gap: 20px;
+    align-items: start;
     margin-top: 1rem;
+    min-height: 38px;
   }
   .text {
     font-size: 1.25rem;
@@ -356,6 +431,11 @@
   	letter-spacing: 0.05em;
   	text-transform: uppercase;
   }
+
+  .proj-link.small {
+    margin-top: 0;
+  }
+
 
   .mobile-details {
     display: flex;
@@ -393,4 +473,28 @@
   }
 
 
+
+  .small {
+    font-size: 0.9em;
+  }
+
+  .small-project .descrip {
+    gap: 4px;
+  }
+
+  .small-project .video {
+    aspect-ratio: 16 / 9;
+  }
+
+
+  @media (max-width: 700px) {
+
+    .more-projects {
+      gap: 16px;
+    }
+    
+    .small-project {
+      width: 175px;
+    }
+  }
 </style>
