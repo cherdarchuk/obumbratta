@@ -117,6 +117,14 @@
   ],
   "moreProjects": [
     {
+      "name": "US Citizenship Timelines",
+      "collab": "with <b>USAFacts</b>",
+      "link": "https://usafacts.org/articles/how-long-can-it-take-to-become-a-us-citizen/",
+      "link_text": "View",
+      "video": "ribbons.png",
+      "alt": "A phone on a desktop scrolling through a visualization featuring an animated blob"
+    },
+    {
       "name": "Visualizing CPPs Net-Zero Commitment",
       "collab": "with <b>Voilà</b> for <b>CPP Investments</b>",
       "link": "https://chezvoila.com/project/changingworld/",
@@ -126,8 +134,9 @@
     },
     {
       "name": "Exploring the US Budget",
-      "collab": "for <b>USAFacts</b>",
-      "link": "https://usafacts.org/articles/this-chart-tells-you-everything-you-want-to-know-about-government-spending/",
+      "collab": "with <b>USAFacts</b>",
+      "link": "https://usafacts.org/government-spending/",
+      "altlink": "https://usafacts.org/articles/this-chart-tells-you-everything-you-want-to-know-about-government-spending/",
       "link_text": "View",
       "video": "budget-sankey.png",
       "alt": "A sankey diagram looking at US spending vs revenue."
@@ -142,7 +151,7 @@
     },
     {
       "name": "US Budget by Agency",
-      "collab": "for <b>USAFacts</b>",
+      "collab": "with <b>USAFacts</b>",
       "link": "https://usafacts.org/visualizations/agency-spending/",
       "link_text": "View",
       "video": "budget-agency.png",
@@ -150,7 +159,7 @@
     },
     {
       "name": "US Immigrant Program Eligibility",
-      "collab": "for <b>USAFacts</b>",
+      "collab": "with <b>USAFacts</b>",
       "link": "https://usafacts.org/articles/immigrant-program-eligibility/",
       "link_text": "View",
       "video": "immigrant-eligibility.png",
@@ -158,7 +167,7 @@
     },
     {
       "name": "OBBB Timeline",
-      "collab": "for <b>USAFacts</b>",
+      "collab": "with <b>USAFacts</b>",
       "link": "https://usafacts.org/visualizations/obbb-timeline/",
       "link_text": "View",
       "video": "OBBB-timeline.png",
@@ -182,7 +191,7 @@
     },
     {
       "name": "2022 US Midterm Map",
-      "collab": "for <b>USAFacts</b>",
+      "collab": "with <b>USAFacts</b>",
       "link": "https://usafacts.org/data-projects/2022-midterm-map",
       "link_text": "View",
       "video": "midterm-map.png",
