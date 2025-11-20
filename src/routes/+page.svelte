@@ -415,7 +415,7 @@
     line-height: 1.3em;
   }
   .mobile .text{
-    font-size: 1rem;;
+    font-size: 1rem;
   }
   .badge {
     flex-shrink: 0;
