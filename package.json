@@ -29,7 +29,9 @@
   "type": "module",
   "dependencies": {
     "archieml": "^0.5.0",
+    "chroma-js": "^3.1.2",
     "json": "^11.0.0",
-    "node-fetch": "^3.3.2"
+    "node-fetch": "^3.3.2",
+    "uicolors-generator": "^1.2.4"
   }
 }

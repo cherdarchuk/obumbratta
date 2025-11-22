@@ -1,123 +1,148 @@
 <script>
+  import chroma from 'chroma-js';
+  import { getTailwindColors } from "uicolors-generator";
   import Swatch from '$lib/components/Swatch.svelte';
-  let inputValue = $state('');
+  import StepChart from '$lib/components/StepChart.svelte';
+	import { get } from 'svelte/store';
+	
+  const colourSpaces = ['lab', 'lab-bezier', 'lch','hsl', 'hsv', 'rgb', 'oklab', 'oklch'];
+  
+  let inputValue = $state('purple');
   let nameValue = $state('');
+  let numColours = $state(11);
+  // let startExtend = $state(0);
+  let colorSpace = $state('lch');
+  let correctLightness = $state(false);
+  let blackBackground = $state(false);
 
-  let colourArray = $derived(colourParse2(inputValue));
-
-  let cssValue = $derived(getCSS(colourArray));
-  let figmaValue = $derived(convertCssVariables(cssValue));
-
-  function makeValidColour(str) {
-    let s = str.trim().replace(";","");
-    // If it looks like a hex code without #, add it
-    if (/^[0-9a-f]{3,4}$|^[0-9a-f]{6}$|^[0-9a-f]{8}$/i.test(s)) {
-      s = '#' + s;
-    }
-    // Validate hex, rgb(a), hsl(a)
-    if (
-      /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(s) ||
-      /^rgba?\(\s*(\d{1,3}%?\s*,\s*){2}\d{1,3}%?(\s*,\s*(0|1|0?\.\d+))?\s*\)$/i.test(s) ||
-      /^hsla?\(\s*\d{1,3}\s*,\s*\d{1,3}%\s*,\s*\d{1,3}%(\s*,\s*(0|1|0?\.\d+))?\s*\)$/i.test(s)
-    ) {
-      return s;
-    }
-    // Named CSS colors
-    const cssColors = [
-      "black","silver","gray","white","maroon","red","purple","fuchsia","green","lime","olive","yellow","navy","blue","teal","aqua",
-      "orange","aliceblue","antiquewhite","aquamarine","azure","beige","bisque","blanchedalmond","blueviolet","brown","burlywood",
-      "cadetblue","chartreuse","chocolate","coral","cornflowerblue","cornsilk","crimson","cyan","darkblue","darkcyan","darkgoldenrod",
-      "darkgray","darkgreen","darkgrey","darkkhaki","darkmagenta","darkolivegreen","darkorange","darkorchid","darkred","darksalmon",
-      "darkseagreen","darkslateblue","darkslategray","darkslategrey","darkturquoise","darkviolet","deeppink","deepskyblue","dimgray",
-      "dimgrey","dodgerblue","firebrick","floralwhite","forestgreen","gainsboro","ghostwhite","gold","goldenrod","greenyellow","grey",
-      "honeydew","hotpink","indianred","indigo","ivory","khaki","lavender","lavenderblush","lawngreen","lemonchiffon","lightblue",
-      "lightcoral","lightcyan","lightgoldenrodyellow","lightgray","lightgreen","lightgrey","lightpink","lightsalmon","lightseagreen",
-      "lightskyblue","lightslategray","lightslategrey","lightsteelblue","lightyellow","limegreen","linen","magenta","mediumaquamarine",
-      "mediumblue","mediumorchid","mediumpurple","mediumseagreen","mediumslateblue","mediumspringgreen","mediumturquoise","mediumvioletred",
-      "midnightblue","mintcream","mistyrose","moccasin","navajowhite","oldlace","olivedrab","orangered","orchid","palegoldenrod",
-      "palegreen","paleturquoise","palevioletred","papayawhip","peachpuff","peru","pink","plum","powderblue","rosybrown","royalblue",
-      "saddlebrown","salmon","sandybrown","seagreen","seashell","sienna","skyblue","slateblue","slategray","slategrey","snow","springgreen",
-      "steelblue","tan","thistle","tomato","turquoise","violet","wheat","whitesmoke","yellowgreen","rebeccapurple"
-    ];
-    if (cssColors.includes(s.toLowerCase())) return s;
-    return "black";
-  }
+  let parsedNames = $derived(nameParse(inputValue));
+  let parsedColours = $derived(colourParse(inputValue));
+  let transformedColours = $derived(interpolateColors(parsedColours));
+  let outputNames = $derived(getDefaultNameVals(transformedColours.length));
+  let lightnessArray = $derived(transformedColours.map(c => chroma(c).lab()[0]));
 
 
-  function colourParse(str) {
-    return str
-    .split(',')
-    .map(s => makeValidColour(s))
-  }
+  let inputCssValue = $derived(getCSS(parsedColours, parsedNames));
+  let outputCssValue = $derived(getCSS(transformedColours));
 
-  function colourParse2(str) {
-  // Split on commas or newlines
-  const parts = str.split(/[\n,]+/).map(s => s.trim()).filter(Boolean);
-    // Step naming convention (same as copyCSS)
-  let steps = [100, 200, 300, 400, 500, 600, 700, 800, 900];
-  if (parts.length === 10) {
-    steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
-  } else if (parts.length === 11) {
-    steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
-  } else if (parts.length === 12) {
-    steps = [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
-  } else {
-    steps = Array.from({length: parts.length}, (_, i) => (i+1)*100);
-  }
-  return parts.map((s, i) => {
-    const match = s.match(/^([^:]+):\s*(.+)$/);
-    if (match) {
-      // property: value
-      return {
-        name: match[1].trim().replace(/^['"]+|['"]+$/g, ''),
-        value: makeValidColour(match[2].replace(/^['"]+|['"]+$/g, ''))
-      };
-    } else {
-      // just a value, assign name as 100, 200, ...
-      const obj = {
-        name: steps[i],
-        value: makeValidColour(s)
-      };
-      return obj;
-    }
-  });
-}
-
+  let inputFigmaValue = $derived(convertCssVariables(inputCssValue)); 
+  let outputFigmaValue = $derived(convertCssVariables(outputCssValue)); 
   let svgRef;
 
-    async function copySVG() {
+
+
+  function interpolateColors(colours) {
+    let colourList = [...colours];
+    let scale;
+    let domainVals = [0,1];
+
+    if (colours.length < 1) {
+      return colourList;
+    }
+    else if (colours.length === 1) {
+      const originalColour = colours[0];
+      const obj = getTailwindColors(colours[0], {asHex: true});
+      const tailwindColors = Object.values(obj);
+      const originalIndex = tailwindColors.findIndex(c => c === originalColour);
+
+      if (numColours <= 9 && originalIndex !== 0 && originalIndex !== 10) {
+        colourList = [tailwindColors[1],colourList[0],tailwindColors[9]];
+        domainVals = [0, (originalIndex-1)/9, 1];
+      }
+      else {
+        colourList = [tailwindColors[0],colourList[0],tailwindColors[10]];
+        domainVals = [0, originalIndex/10, 1];
+      }
+      
+    }
+
+    scale = colorSpace === 'lab-bezier'
+      ? chroma.bezier(colourList).scale()
+      : chroma.scale(colourList).mode(colorSpace);
+
+    return scale.correctLightness(correctLightness).domain(domainVals).colors(numColours);
+  }
+
+
+  
+  function getDefaultNameVals(length) {
+    const stepMap = {
+      9: [100, 200, 300, 400, 500, 600, 700, 800, 900],
+      10: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900],
+      11: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950],
+      12: [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+    };
+    return stepMap[length] || Array.from({length: length}, (_, i) => (i+1)*100);
+  }
+
+  function colourParse(str) {
+    // Split on commas or newlines
+    if (!str || !str.trim()) return { colours: [], names: [] };
+    const parts = str.split(/[;,]+/).map(s => s.trim()).filter(Boolean);
+    
+    const colours = [];
+    
+    parts.forEach((s, i) => {
+      const match = s.match(/^([^:]+):\s*(.+)$/);
+      if (match) {
+        const st = match[2].replace(/^['"]+|['"]+$/g, '');
+        colours.push(chroma.valid(st) ? chroma(st).hex() : '#000000');
+      } else {
+        colours.push(chroma.valid(s) ? chroma(s).hex() : '#000000');
+      }
+    });
+    
+    return colours;
+  }
+
+  
+  function nameParse(str) {
+    // Split on commas or newlines
+    if (!str || !str.trim()) return [];
+    const parts = str.split(/[;,]+/).map(s => s.trim()).filter(Boolean);
+    let names = [];
+    
+    parts.forEach((s, i) => {
+      const match = s.match(/^([^:]+):\s*(.+)$/);
+      if (match) {
+        // property: value format
+        const st = match[2].replace(/^['"]+|['"]+$/g, '');
+        names.push(match[1].trim().replace(/^['"]+|['"]+$/g, ''));
+      }
+    });
+    
+    return names;
+  }
+
+  function getSVG() {
     if (!svgRef) return;
     // Serialize the SVG node to a string
     const serializer = new XMLSerializer();
     const svgString = serializer.serializeToString(svgRef);
-
-    // Copy to clipboard as text
-    try {
-      await navigator.clipboard.writeText(svgString);
-      // alert('SVG copied to clipboard!');
-    } catch (e) {
-      alert('Failed to copy SVG');
-    }
+    return svgString;
   }
+  
 
-  function getCSS(colourArray) {
-    // Determine the steps for names
-    let steps = [100, 200, 300, 400, 500, 600, 700, 800, 900];
-    if (colourArray.length === 10) {
-      steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900];
-    } else if (colourArray.length === 11) {
-      steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
-    } else if (colourArray.length === 12) {
-      steps = [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
-    }
+  function getCSS(colours, names = []) {
 
     // Use nameValue or fallback to "color"
     const baseName = nameValue.trim() ? nameValue.trim().toLowerCase().replace(/\s+/g, '-') : 'color';
+    let css
 
-    // Build CSS string
-    const css = colourArray.map((c, i) =>
-      `  --${baseName}-${steps[i]}: ${c.value};`
-    ).join('\n');
+    if (names.length !== colours.length) {
+      names = getDefaultNameVals(colours.length);
+
+      css = colours.map((c, i) =>
+        `  --${baseName}-${names[i]}: ${c};`
+      ).join('\n');
+    } else {
+      css = colours.map((c, i) => {
+        // Check if name starts with -- or -, if not add --
+        const name = names[i].toString();
+        const formattedName = name.startsWith('--') ? name : `--${name}`;
+        return `  ${formattedName}: ${c};`;
+      }).join('\n');
+    }
 
     return css;
   }
@@ -129,12 +154,17 @@
   function reverseColours() {
     // Split on commas or newlines, trim, filter out empty, reverse, and join with commas
     const reversed = inputValue
-      .split(/[\n,]+/)
+      .split(/[;,]+/)
       .map(s => s.trim())
       .filter(Boolean)
       .reverse()
       .join(', ');
     inputValue = reversed;
+  }
+
+  function spaceToComma() {
+    const commas = inputValue.replace(/\s+/g, ',');
+    inputValue = commas;
   }
 
 
@@ -177,60 +207,253 @@
 
 </script>
 
-<h1>Colour</h1>
+<div class="container" class:black-background={blackBackground}>
 
+  <h2>Colour</h2>
 
-<textarea
-  type="text"
-  bind:value={inputValue}
-  placeholder="Enter a colours separated by commas"
-  class="big-input"
-></textarea>
-
-<label for="name-input">Name</label>
-<input
-  id="name-input"
-  type="text"
-  bind:value={nameValue}
-  placeholder="Enter a name..."
-  style="margin-bottom: 1em; font-size: 1.2em; padding: 0.3em 0.8em; border-radius: 6px; display: block;"
-/>
+  <div class="row">  
+    <input
+      type="text"
+      bind:value={inputValue}
+      placeholder="Enter colours separated by commas"
+      class="big-input"
+    />
+    <button onclick={reverseColours} style="width: 100px;">Reverse</button>
+    <button onclick={spaceToComma} style="width: 100px;">" " → ","</button>
+  </div>
 
 
 
-<textarea
-  type="text"
-  bind:value={figmaValue}
-  placeholder="Figma export"
-  class="big-input"
-/>
 
-<br>
-<button on:click={reverseColours} style="margin-bottom:1em;">Reverse Colours</button>
-<button on:click={copySVG} style="margin-bottom:1em;">Copy SVG to Clipboard</button>
-<button on:click={copyToClipboard(cssValue)} style="margin-bottom:1em;">Copy CSS to Clipboard</button>
-<button on:click={copyToClipboard(figmaValue)} style="margin-bottom:1em;">Copy for Figma</button>
-<br>
+  <svg width="1200px" height="40px" viewBox="0 0 1200 40" xmlns="http://www.w3.org/2000/svg">
+    {#each parsedColours as colour, i}
+      <Swatch {colour} name={''} x={i*90} short={true}   />
+    {/each}
+  </svg>
 
 
+  <div class="row">  
+    <!-- <div>
+      <label for="num-colours">Extend Start</label>
+      <input
+        id="start-extend"
+        type="number"
+        bind:value={startExtend}
+        min="0"
+        max="10"
+        style="width: 100px;"
+      />
+    </div> -->
 
-<svg bind:this={svgRef} width="1200px" height="900px" viewBox="0 0 900 900" xmlns="http://www.w3.org/2000/svg">
-  <!-- <Swatch colour="#ff0000" />
-  <Swatch colour="#00ff00" x="100" />
-  <Swatch colour="#0000ff" x="200" /> -->
+    <div>
+      <label for="num-colours">No. Colours</label>
+      <input
+        id="num-colours"
+        type="number"
+        bind:value={numColours}
+        min="2"
+        max="20"
+        style="width: 100px;"
+      />  
+    </div>
 
-  {#each colourArray as colour, i}
-    <Swatch colour={colour.value} name={colour.name} x={i*90}   />
-  {/each}
-</svg>
+    <div>
+    <label for="color-space">Color Space</label>
+    <select id="color-space" bind:value={colorSpace}>
+      {#each colourSpaces as space}
+        <option value={space}>{space.toUpperCase()}</option>
+      {/each}
+    </select>
+    </div>
+
+    <div>
+      <label for="correct-lightness">Correct Lightness</label>
+      <input class="big-checkbox"
+        id="correct-lightness"
+        type="checkbox"
+        bind:checked={correctLightness}
+      />
+    </div> 
+
+    <div>
+      <label for="black-background">Black Background</label>
+      <input class="big-checkbox"
+        id="black-background"
+        type="checkbox"
+        bind:checked={blackBackground}
+      />
+    </div>  
+
+    <button onclick={() => copyToClipboard(inputCssValue)}>Copy Input CSS to Clipboard</button>
+    <button onclick={() => copyToClipboard(inputFigmaValue)}>Copy Input Figma to Clipboard</button>
+  </div>
+
+
+  <h2>Transformed</h2>
+  <svg bind:this={svgRef} width="1000px" height="100px" viewBox="0 0 1000 100" xmlns="http://www.w3.org/2000/svg">
+    {#each transformedColours as colour, i}
+      <Swatch {colour} name={outputNames[i]} x={i*Math.min(90, 1000/numColours)} width={Math.min(84,1000/numColours-6)} />
+    {/each}
+  </svg>
+
+  <StepChart values={lightnessArray} size={Math.min(1000,90*numColours)} />
+
+  <div class="row">
+    <button onclick={() => copyToClipboard(getSVG())}>Copy SVG to Clipboard</button>
+    <div>
+      <label for="name-input">CSS Variable Name</label>
+      <input
+        id="name-input"
+        type="text"
+        bind:value={nameValue}
+        placeholder="Enter a name..."
+      />
+    </div>
+    <button onclick={() => copyToClipboard(transformedColours.toString())}>Copy array to Clipboard</button>
+    <button onclick={() => copyToClipboard(outputCssValue)}>Copy CSS to Clipboard</button>
+    <button onclick={() => copyToClipboard(outputFigmaValue)}>Copy for Figma</button>
+  </div>
+
+</div>
 
 
 <style>
+
+  .row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
   .big-input {
-    width: 400px;
+    width: 100%;
     min-height: 50px;
     border-radius: 6px;
-    margin-bottom: 1em;
-    resize: vertical;
+    /* resize: vertical; */
+  }
+  .big-checkbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  input {
+    display: block;
+    font-size: 16px;
+    min-height: 50px;
+    border-radius: 6px;
+  }
+
+  label {
+    display: block;
+  }
+
+  select {
+    min-height: 50px;
+    border-radius: 6px;
+  }
+
+  button {
+    padding: 10px;
+    border: 1px solid grey;
+    border-radius: 6px;
+  }
+
+  .container {
+    max-width: 1600px;
+    margin: 70px auto 40px;
+    padding: 0 40px;
+    background-color: white;
+  }
+  .black-background {
+    background-color: black;
+  }
+
+  .mq-mobile.container {
+    padding: 0 24px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 3.75rem;
+    max-width: 800px;
+    margin: auto;
+    letter-spacing: -0.05em;
+  }
+
+  h2, .obumbratta {
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    display: table;
+    margin: auto;
+    padding: 8px 6px 4px 10px;
+    border-radius: 3px ;
+    background-color: var(--back-colour);
+  }
+
+  h2 {
+    position: sticky;
+    top: 70px;
+    margin-bottom: 1rem;
+    width: 100%;
+  }
+
+  h2.mq-mobile{
+    position: relative;
+    top: 0;
+  }
+
+
+  h3 {
+    text-align: center;
+    font-size: 1rem;
+    color: var(--grey-600);
+  }
+
+  .break {
+    margin: 2.5rem auto;
+    width: 2rem;
+    border-bottom: 1px solid var(--brown-400);
+  }
+
+
+  /* Scrolly formatting */
+
+    .step {
+    max-width: 500px;
+    margin: auto;
+    margin-bottom: 3rem;
+  }
+
+
+
+  /* Contact Info */
+  .contacts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 5rem;
+  }
+
+  .contact-cta {
+    width: 180px;
+    font-family: var(--sans);
+    font-size: 0.875rem;
+    line-height: 1.4rem;
+
+  }
+  .contact-points {
+    width: 180px;
+  }
+  .contact-points a {
+    display: flex;
+    align-items: center;
+    line-height: 1.4rem;
+    gap: 8px;
+    font-family: var(--sans);
+    font-size: 0.875rem;
   }
 </style>
