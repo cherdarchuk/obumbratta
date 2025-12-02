@@ -5,7 +5,7 @@
     align = 'center', 
     fixToElement = true,
     xOffset = 0,
-    yOffset = -10,
+    yOffset = -6,
     screenPadding = 10,
     children 
   } = $props();

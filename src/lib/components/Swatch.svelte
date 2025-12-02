@@ -7,6 +7,7 @@
     x = 0,
     width = 84,
     div = false,
+    oncopy,
   } = $props();
 
   function getTextColor(backgroundColor) {
@@ -23,7 +24,9 @@
 </script>
 
 {#if !div}
-  <g>
+  <!-- svelte-ignore a11y_click_events_have_key_events -->
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <g onclick={(e) => { oncopy?.(colour, e, colour); }}>
     <rect {x} {width} height={100} fill={colour} rx="8" />
     <text x="{x + width/2}" y="55" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
     <text x="{x + width/2}" y={"70"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text>
@@ -32,7 +35,7 @@
   <div class="swatch" style="background-color: {colour}; color: {getTextColor(colour)}; width: {width}px;">
     {name}
   </div>
-{/if} 
+{/if}
 
 <style>
   .swatch {
@@ -44,5 +47,9 @@
     justify-content: center;
     font-size: 12px;
     padding-top: 2px;
+  }
+  
+  text {
+    pointer-events: none;
   }
 </style>

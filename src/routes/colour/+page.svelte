@@ -2,6 +2,7 @@
   import chroma from 'chroma-js';
   import { getTailwindColors } from "uicolors-generator";
   import { fade } from 'svelte/transition';
+  import { copyToClipboard as copyToClipboardCall } from '$lib/helpers/utils.js';
 
 
   import CssIcon from '$lib/assets/css.svg';
@@ -339,53 +340,12 @@
     return css;
   }
 
-   // Copy to clipboard with proper error handling and return values
-   const copyToClipboardCall = async (text) => {
-    try {
-      // Attempt to use the modern clipboard API
-      await navigator.clipboard.writeText(text);
-      console.log('Copied "' + text + '" to clipboard');
-      return { success: true, message: 'Text copied to clipboard successfully' };
-    } catch (e1) {
-      console.log('navigator.clipboard.writeText not working, trying execCommand');
-      
-      // Fallback to execCommand for older browsers
-      try {
-        // Create a temporary input element
-        const inputElement = document.createElement('input');
-        inputElement.value = text;
-        inputElement.style.position = 'absolute';
-        inputElement.style.left = '-9999px'; // Move it off-screen
-        document.body.appendChild(inputElement);
-
-        // Select the text and execute the copy command
-        inputElement.select();
-        const successful = document.execCommand('copy');
-        
-        // Remove the temporary input element
-        document.body.removeChild(inputElement);
-        
-        if (successful) {
-          console.log('Copy command was successful');
-          return { success: true, message: 'Text copied to clipboard successfully' };
-        } else {
-          console.log('Copy command was unsuccessful');
-          return { success: false, error: 'Copy command failed' };
-        }
-      } catch (e2) {
-        console.error('Could not copy to clipboard', e2);
-        return { success: false, error: 'Failed to copy to clipboard: ' + e2.message };
-      }
-    }
-  };
-
+   
   async function copyToClipboard(text, e, type="") {
-    console.log('copyToClipboard called', { e, hasTarget: !!e?.target });
     toastEvent = e;
     let result = await copyToClipboardCall(text);
     clipboardMessage = result.success ? type + ' copied to clipboard' : 'Failed to copy to clipboard.';
     toastOn = true;
-    console.log('toastOn set to true, toastEvent:', toastEvent);
     setTimeout(() => { toastOn = false; }, 1400);
   }
 
@@ -613,7 +573,13 @@
     </div>
     <svg bind:this={svgRef} viewBox="0 0 1000 100" xmlns="http://www.w3.org/2000/svg">
       {#each transformedColours as colour, i}
-        <Swatch {colour} name={outputNames[i]} x={i*Math.min(15000, 1006/numColours)} width={Math.min(15000,1006/numColours-6)} />
+        <Swatch 
+          {colour} 
+          name={outputNames[i]} 
+          x={i*Math.min(15000, 1006/numColours)} 
+          width={Math.min(15000,1006/numColours-6)} 
+          oncopy={(text, e, type) => copyToClipboard(text, e, type)}
+        />
       {/each}
     </svg>
 
@@ -735,10 +701,6 @@
   }
 
 
-  select {
-    min-height: 50px;
-    border-radius: 6px;
-  }
 
   button {
     display: flex;
@@ -753,6 +715,10 @@
     font-size: 12px;
     letter-spacing: -0.5px;
     cursor: pointer;
+  }
+
+  :global(button > *) {
+    pointer-events: none;
   }
 
   .button-section {
