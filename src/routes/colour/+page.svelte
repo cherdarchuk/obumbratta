@@ -28,7 +28,7 @@
     { label: 'RGB', value: 'rgb', icon: ColourIcon },
   ];
   
-  let inputValue = $state('purple');
+  let inputValue = $state('lightyellow, cyan, #02439e');
   let nameValue = $state('');
   let numColours = $state(11);
   // let startExtend = $state(0);
