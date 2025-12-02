@@ -45,6 +45,15 @@
   // let appColours = $derived(getTailwindColors(backgroundColor, {asHex: true}));
   let appColoursCss = $derived(getAppColoursCss(blackBackground));
 
+  // Toggle a body class so this page can force a black background independent of +layout
+  $effect(() => {
+    if (blackBackground) {
+      document.body.classList.add('page-black-bg');
+    } else {
+      document.body.classList.remove('page-black-bg');
+    }
+  });
+
 
   let parsedNames = $derived(nameParse(inputValue));
   let parsedColours = $derived(colourParse(inputValue || '#000000'));
@@ -395,7 +404,6 @@
     inputValue = '';
   }
 
-  $inspect(inputValue);
 
 
   function convertCssVariables(cssVariables) {
@@ -449,6 +457,9 @@
     	--app-700: var(--brown-700);
     	--app-800: var(--brown-800);
     	--app-900: var(--brown-900);
+
+      --app-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+      --chart-background: rgba(0, 0, 0, 0.05);
       `;
 
     if (blackBackground) {
@@ -463,6 +474,9 @@
         --app-700: var(--brown-200);
         --app-800: var(--brown-100);
         --app-900: var(--brown-50); 
+        
+        --app-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.25);
+        --chart-background: rgba(255, 255, 255, 0.1);
         `;
     }
     return css;
@@ -602,12 +616,23 @@
 
 <style>
 
+
   :global(body) {
     background-color: var(--sel-background);
   }
 
+  /* When this page toggles black background, override layout using a body class */
+  :global(body.page-black-bg) {
+    background-color: #000 !important;
+  }
+
   :global(.full-width) {
     background-color: var(--sel-background);
+  }
+
+  /* Stronger header overrides when page-black-bg is active */
+  :global(body.page-black-bg .full-width) {
+    background-color: #000 !important;
   }
 
 
@@ -629,8 +654,8 @@
     margin: auto;
     padding: 16px 20px 16px 20px;
     border-radius: 8px;
-    border: 1px solid var(--brown-50);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
+    border: 1px solid var(--app-50);
+    box-shadow: var(--app-shadow);
     width: 100%;
   }
   .big-checkbox {
@@ -642,12 +667,12 @@
     display: block;
     font-size: 16px;
     height: 36px;
-    border: 1px solid var(--brown-100);
+    border: 1px solid var(--app-100);
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.15);
     border-radius: 6px;
     padding: 10px;
-    background-color: white;
-    color: var(--text-colour);
+    background-color: var(--sel-background);
+    color: var(--app-900);
   }
 
   input::placeholder {
@@ -677,11 +702,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--brown-700);
+    color: var(--app-700);
     padding: 0px 10px;
-    border: 1px solid var(--brown-100);
+    border: 1px solid var(--app-100);
     border-radius: 6px;
-    background-color: var(--brown-50);
+    background-color: var(--app-50);
     height: 36px;
     font-size: 12px;
     letter-spacing: -0.5px;
@@ -722,7 +747,7 @@
   }
 
   h2 {
-    color: var(--text-colour);
+    color: var(--app-800);
     text-align: left;
     font-size: 1.125rem;
     font-weight: 700;
@@ -753,19 +778,19 @@
   .break {
     margin: 2.5rem auto;
     width: 2rem;
-    border-bottom: 1px solid var(--brown-400);
+    border-bottom: 1px solid var(--app-400);
   }
 
   .small-label {
     font-size:12px; 
-    color:var(--brown-500);
+    color:var(--app-500);
   }
 
 
   .tip-text {
     border-radius: 6px;
-    background-color: var(--brown-100);
-    color: var(--brown-600);
+    background-color: var(--app-100);
+    color: var(--app-600);
     padding: 8px 12px;
   }
 

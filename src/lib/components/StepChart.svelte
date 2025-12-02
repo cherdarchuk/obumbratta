@@ -16,7 +16,7 @@
 </script>
 
 <svg width={size} height={200} viewBox="0 0 100, 100" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-  <rect x="0" y="0" width="100" height="100" fill="#eee" />
+  <rect x="0" y="0" width="100" height="100" fill="var(--chart-background, rgba(0, 0, 0, 0.05))" />
   {#each values as value, i}
 
     {@const prevValue = i > 0 ? values[i - 1] : 0}
@@ -25,7 +25,7 @@
       x1={i * lineLength} 
       y2={100 - (value - min) / (max - min) * 100} 
       x2={(i + 1) * lineLength}
-      stroke="black" 
+      stroke="grey" 
       stroke-width="1"
     />
     {#if i > 0}

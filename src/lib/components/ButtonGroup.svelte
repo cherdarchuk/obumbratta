@@ -59,7 +59,7 @@ let {
 
   :global(.btn-grp-label) {
     font-size: 12px;
-    color: var(--brown-500);
+    color: var(--app-500);
     width: 80px;
     text-align: right;
     /* white-space: nowrap; */
@@ -79,10 +79,10 @@ let {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--brown-700);
+    color: var(--app-700);
     padding: 4px 10px 0px 10px;
-    border: 1px solid var(--brown-100);
-    background-color: var(--brown-50);
+    border: 1px solid var(--app-100);
+    background-color: var(--app-50);
     height: 36px;
     font-size: 12px;
     letter-spacing: -0.5px;
@@ -91,9 +91,9 @@ let {
   }
 
   :global(.grouped-btn.active) {
-    background-color: var(--brown-200);
+    background-color: var(--app-200);
     font-weight: bold;
-    color: var(--brown-900);
+    color: var(--app-900);
     padding-top: 5px;
   }
 
@@ -104,6 +104,6 @@ let {
   :global(.grouped-btn:last-child) {
     border-radius: 0 6px 6px 0;
     margin-right: 0px;
-    border-right: 1px solid var(--brown-100);
+    border-right: 1px solid var(--app-100);
   }
 </style>
