@@ -24,8 +24,8 @@
 
 <g>
   <rect {x} {width} height={short ? "32" : "100"} fill={colour} rx="8" />
-  <text x="{x + width/2}" y={short ? "20" : "55"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour}</text>
   {#if !short}
-    <text x="{x + width/2}" y="70" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
+    <text x="{x + width/2}" y="55" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
   {/if}
+  <text x="{x + width/2}" y={short ? "20" : "70"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{short ? colour.toUpperCase() : colour.replace('#', '').toUpperCase()}</text>
 </g>
