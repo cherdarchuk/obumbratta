@@ -26,7 +26,7 @@
 {#if !div}
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
-  <g onclick={(e) => { oncopy?.(colour, e, colour); }}>
+  <g onclick={(e) => { oncopy?.(colour, { target: e.currentTarget, clientX: e.clientX, clientY: e.clientY }, colour); }}>
     <rect {x} {width} height={100} fill={colour} rx="8" />
     <text x="{x + width/2}" y="55" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
     <text x="{x + width/2}" y={"70"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text>
@@ -47,9 +47,5 @@
     justify-content: center;
     font-size: 12px;
     padding-top: 2px;
-  }
-  
-  text {
-    pointer-events: none;
   }
 </style>
