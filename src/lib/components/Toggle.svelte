@@ -6,9 +6,17 @@ let {
     label = '',
   } = $props();
 
+  let onBtn;
+  let offBtn;
+
   // Toggle function - clicking either button flips the value
   function toggle() {
     value = !value;
+    if (value) {
+      onBtn?.focus();
+    } else {
+      offBtn?.focus();
+    }
   }
   
 </script>
@@ -20,14 +28,18 @@ let {
 
   <div class="button-group">
     <button 
+      bind:this={onBtn}
       class="toggle-btn {value === true ? 'active' : ''}"
       onclick={toggle}
+      onkeydown={(e) => { if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') toggle(); }}
     >
       ON
     </button>
     <button 
+      bind:this={offBtn}
       class="toggle-btn {value === false ? 'active' : ''}"
       onclick={toggle}
+      onkeydown={(e) => { if (e.key === 'ArrowUp' || e.key === 'ArrowDown' || e.key === 'ArrowLeft' || e.key === 'ArrowRight') toggle(); }}
     >
       OFF
     </button>
