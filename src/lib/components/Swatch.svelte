@@ -6,7 +6,7 @@
     name = 'grey',
     x = 0,
     width = 84,
-    short = false,
+    div = false,
   } = $props();
 
   function getTextColor(backgroundColor) {
@@ -22,10 +22,27 @@
 
 </script>
 
-<g>
-  <rect {x} {width} height={short ? "32" : "100"} fill={colour} rx="8" />
-  {#if !short}
+{#if !div}
+  <g>
+    <rect {x} {width} height={100} fill={colour} rx="8" />
     <text x="{x + width/2}" y="55" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
-  {/if}
-  <text x="{x + width/2}" y={short ? "20" : "70"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{short ? colour.toUpperCase() : colour.replace('#', '').toUpperCase()}</text>
-</g>
+    <text x="{x + width/2}" y={"70"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text>
+  </g>
+{:else}
+  <div class="swatch" style="background-color: {colour}; color: {getTextColor(colour)}; width: {width}px;">
+    {name}
+  </div>
+{/if} 
+
+<style>
+  .swatch {
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    padding-top: 2px;
+  }
+</style>

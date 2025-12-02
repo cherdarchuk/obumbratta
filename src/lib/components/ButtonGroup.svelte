@@ -88,6 +88,7 @@ let {
     letter-spacing: -0.5px;
     cursor: pointer;
     border-right: none;
+    max-width: 50px;
   }
 
   :global(.grouped-btn.active) {

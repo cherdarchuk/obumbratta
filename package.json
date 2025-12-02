@@ -41,6 +41,7 @@
     "archieml": "^0.5.0",
     "bits-ui": "^2.14.4",
     "chroma-js": "^3.1.2",
+    "d3": "^7.9.0",
     "json": "^11.0.0",
     "node-fetch": "^3.3.2",
     "uicolors-generator": "^1.2.4"

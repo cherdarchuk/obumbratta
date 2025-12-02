@@ -11,12 +11,11 @@
   import ColourIcon from '~icons/tabler/color-filter';
 
   import Swatch from '$lib/components/Swatch.svelte';
-  import StepChart from '$lib/components/StepChart.svelte';
+  import MultiLineChart from '$lib/components/MultiLineChart.svelte';
   import Tooltip from '$lib/components/Tooltip.svelte';
   import ButtonGroup from '$lib/components/ButtonGroup.svelte';
-  import ButtonGroupBoolean from '$lib/components/ButtonGroupBoolean.svelte';
+  import Toggle from '$lib/components/Toggle.svelte';
 	
-  const colourSpacesOLD = ['lab', 'lab-bezier', 'lch','hsl', 'hsv', 'rgb', 'oklab', 'oklch'];
   const colourSpaces = [
     { label: 'LAB', value: 'lab', icon: ColourIcon },
     { label: 'OK LAB', value: 'oklab' },
@@ -42,6 +41,7 @@
   let toastEvent = $state(null);
   let clipboardMessage = $state('');
 
+
   // let appColours = $derived(getTailwindColors(backgroundColor, {asHex: true}));
   let appColoursCss = $derived(getAppColoursCss(blackBackground));
 
@@ -60,6 +60,22 @@
   let transformedColours = $derived(interpolateColors(parsedColours));
   let outputNames = $derived(getDefaultNameVals(transformedColours.length));
   let lightnessArray = $derived(transformedColours.map(c => chroma(c).lab()[0]));
+  let colourNameSuggestion = $derived(() => {
+    if (parsedColours.length === 0) return 'color-name';
+    const firstColour = parsedColours[0];
+    const ntcMatch = ntc.name(firstColour);
+    let baseName = ntcMatch[1].toLowerCase().replace(/\s+/g, '-');
+    return baseName;
+  }); 
+  
+  // Transform for MultiLineChart - expects array of objects with series
+  let lightnessChartData = $derived(
+    [...lightnessArray, lightnessArray[lightnessArray.length - 1]].map((val, i) => ({ 
+      index: i, 
+      lightness: val, 
+      series: 'L*' 
+    }))
+  );
 
 
 
@@ -385,7 +401,7 @@
   }
 
   function cleanColours() {
-    inputValue = transformedColours.toString().replace(/,/g, ", ");
+    inputValue = parsedColours.toString().replace(/,/g, ", ");
   }
 
   function spaceToComma() {
@@ -458,8 +474,10 @@
     	--app-800: var(--brown-800);
     	--app-900: var(--brown-900);
 
+      --placeholder-color: var(--grey-300);
+
       --app-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.25);
-      --chart-background: rgba(0, 0, 0, 0.05);
+      --chart-background: rgba(0, 0, 0, 0.03);
       `;
 
     if (blackBackground) {
@@ -474,6 +492,8 @@
         --app-700: var(--brown-200);
         --app-800: var(--brown-100);
         --app-900: var(--brown-50); 
+
+        --placeholder-color: var(--grey-700);
         
         --app-shadow: 0 2px 4px 0 rgba(255, 255, 255, 0.25);
         --chart-background: rgba(255, 255, 255, 0.1);
@@ -496,8 +516,8 @@
         <button onclick={spaceToComma}>delimit</button>
         <button onclick={applyTailwindify}>extend</button>
         <button onclick={clearInput}>clear</button>
-        <button onclick={(e) => copyToClipboard(inputCssValue, e, "CSS")}><CssIcon height={20} width={20}/></button>
-        <button onclick={(e) => copyToClipboard(inputFigmaValue, e, "Figma import")}><FigmaIcon height={20} width={20} /></button>
+        <button onclick={(e) => copyToClipboard(inputCssValue, e, "CSS")} class="desktop-only"><CssIcon height={20} width={20}/></button>
+        <button onclick={(e) => copyToClipboard(inputFigmaValue, e, "Figma import")} class="desktop-only"><FigmaIcon height={20} width={20} /></button>
         <!-- <label for="background-color">Background:</label>
         <input type="color" id="background-color" name="background-color" bind:value={backgroundColor}> -->
       </div>
@@ -514,12 +534,10 @@
 
 
 
-    <div class="row" style="align-items: center;">
-      <svg width="1000px" height="32px" viewBox="0 0 1000 32" xmlns="http://www.w3.org/2000/svg">
+    <div class="swatch-row">
         {#each parsedColours as colour, i}
-          <Swatch {colour} name={''} x={i*72} width={68} short={true}   />
+          <Swatch {colour} name={colour} x={i*72} width={68} div={true}   />
         {/each}
-      </svg>
     </div>
   </div>
 
@@ -528,13 +546,14 @@
       <h2>Configuration</h2>
 
       <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
-        <label for="name-input" class="small-label" style="white-space: nowrap">export name</label>
+        <label for="name-input" class="small-label desktop-only" style="white-space: nowrap">export name</label>
         <input
           id="name-input"
           type="text"
           bind:value={nameValue}
           placeholder="color-name"
           style="width: 174px;"
+          autocomplete="off"
         />
       </div>
     </div>  
@@ -553,10 +572,10 @@
 
 
 
-      <ButtonGroupBoolean bind:value={correctLightness} label="correct lightness" />
-      <ButtonGroupBoolean bind:value={stepwise} label="stepwise interpolation" />
-      <ButtonGroupBoolean bind:value={keepOriginal} label="keep input colours" />
-      <ButtonGroupBoolean bind:value={blackBackground} label="black background" />
+      <Toggle bind:value={correctLightness} label="correct lightness" />
+      <Toggle bind:value={stepwise} label="intelligent interpolation" />
+      <Toggle bind:value={keepOriginal} label="maintain    input colours" />
+      <Toggle bind:value={blackBackground} label="black background" />
 
 
       <ButtonGroup bind:selected={colorSpace} options={colourSpaces} labelAbove={true} label="color<br>space" />
@@ -592,13 +611,28 @@
         </div>
       </div>
     </div>
-    <svg bind:this={svgRef} width="1000px" height="100px" viewBox="0 0 1000 100" xmlns="http://www.w3.org/2000/svg">
+    <svg bind:this={svgRef} viewBox="0 0 1000 100" xmlns="http://www.w3.org/2000/svg">
       {#each transformedColours as colour, i}
         <Swatch {colour} name={outputNames[i]} x={i*Math.min(15000, 1006/numColours)} width={Math.min(15000,1006/numColours-6)} />
       {/each}
     </svg>
 
-    <StepChart values={lightnessArray} size={1000} />
+    {#if lightnessArray.length > 0}
+      <div class="chart-container">
+        <MultiLineChart 
+          data={lightnessChartData} 
+          x="index"
+          y="lightness"
+          series="series"
+          yDomain={[0, 100]}
+          showXAxis={false}
+      		padding={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          colors={['var(--app-500)']}
+          title="perceptual lightness"
+        />
+      </div>
+
+    {/if}
   </div>
 
   {#if toastOn && toastEvent}
@@ -632,18 +666,33 @@
 
   /* Stronger header overrides when page-black-bg is active */
   :global(body.page-black-bg .full-width) {
-    background-color: #000 !important;
+    background-color: var(--grey-900) !important;
   }
 
 
   .row {
     display: flex;
-    gap: 30px;
+    column-gap: 30px;
+    row-gap: 10px;
     align-items: center;
   }
 
   .row.bottom-align {
-    align-items: flex-end
+    align-items: flex-end;
+  }
+
+  @media (max-width: 990px) {
+    .row.bottom-align {
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+  }
+
+  .swatch-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-wrap: wrap;
   }
 
   .box {
@@ -657,10 +706,6 @@
     border: 1px solid var(--app-50);
     box-shadow: var(--app-shadow);
     width: 100%;
-  }
-  .big-checkbox {
-    width: 20px;
-    height: 20px;
   }
 
   input {
@@ -676,7 +721,7 @@
   }
 
   input::placeholder {
-    color: var(--grey-300);
+    color: var(--placeholder-color);
     font-size: 0.875em;
     opacity: 1;
   }
@@ -689,9 +734,6 @@
     /* resize: vertical; */
   }
 
-  label {
-    display: block;
-  }
 
   select {
     min-height: 50px;
@@ -794,33 +836,11 @@
     padding: 8px 12px;
   }
 
-
-
-  /* Contact Info */
-  .contacts {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    margin-bottom: 5rem;
+  .chart-container {
+    height: 200px;
+    background-color: var(--chart-background);
   }
 
-  .contact-cta {
-    width: 180px;
-    font-family: var(--sans);
-    font-size: 0.875rem;
-    line-height: 1.4rem;
 
-  }
-  .contact-points {
-    width: 180px;
-  }
-  .contact-points a {
-    display: flex;
-    align-items: center;
-    line-height: 1.4rem;
-    gap: 8px;
-    font-family: var(--sans);
-    font-size: 0.875rem;
-  }
+
 </style>

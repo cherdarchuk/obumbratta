@@ -52,4 +52,26 @@ a {
 	color: var(--highlight-colour);
 }
 
+/* ************************** */
+/* Mobile or desktop switches */
+/* ************************** */
+.mobile-only {
+	display: none !important;
+}
+@media (max-width: 768px) {
+	.mobile-only {
+		display: block !important;
+	}
+}
+
+.desktop-only {
+	display: none !important;
+}
+@media (min-width: 769px) {
+	.desktop-only {
+		display: block !important;
+	}
+}
+
+
 
