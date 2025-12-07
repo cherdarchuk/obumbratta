@@ -319,7 +319,7 @@
   function getCSS(colours, names = []) {
 
     // Use nameValue or fallback to "color"
-    const baseName = nameValue.trim() ? nameValue.trim().toLowerCase().replace(/\s+/g, '-') : 'color-name';
+    const baseName = nameValue.trim() ? nameValue.trim().toLowerCase().replace(/\s+/g, '-') : 'colour-name';
     let css
 
     if (names.length !== colours.length) {
@@ -511,7 +511,7 @@
           id="name-input"
           type="text"
           bind:value={nameValue}
-          placeholder="color-name"
+          placeholder="colour-name"
           style="width: 174px;"
           autocomplete="off"
         />
@@ -538,7 +538,7 @@
       <Toggle bind:value={blackBackground} label="black background" />
 
 
-      <ButtonGroup bind:selected={colorSpace} options={colourSpaces} labelAbove={true} label="color<br>space" />
+      <ButtonGroup bind:selected={colorSpace} options={colourSpaces} labelAbove={true} label="colour<br>space" />
 
 
 
