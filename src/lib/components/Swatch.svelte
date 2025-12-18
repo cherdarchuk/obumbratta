@@ -31,11 +31,15 @@
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <g onclick={(e) => { oncopy?.(colour, { target: e.currentTarget, clientX: e.clientX, clientY: e.clientY }, colour); }}>
 
-    <rect {x} {width} height={short ? 40 : 100} fill={colour} rx="8" />
+    <rect {x} {width} height={short ? 36 : 100} fill={colour} rx="8" />
     {#if !short}
       <text x="{x + width/2}" y="55" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
       <text x="{x + width/2}" y={"70"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text>
+    <!-- {:else}
+      <text x="{x + width/2}" y={"23"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text> -->
     {/if}
+      
+    
     {#if warn}
       <foreignObject x={x + width/2 - 12} y={2 + (short ? 40 : 100)/2 - 12} width="24" height="24">
         <WarnIcon width="24" height="20" color={getTextColor(colour)} />

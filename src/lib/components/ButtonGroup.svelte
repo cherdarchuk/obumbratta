@@ -5,7 +5,8 @@ let {
     selected = $bindable(''), 
     options = [],
     label = '',
-    labelAbove = false
+    labelAbove = false,
+    stack = true,
   } = $props();
 
   let btnGrpId = $derived(label ? label.replace(/\s+/g, '-').toLowerCase() : `btn-grp-${Math.random().toString(36).substr(2, 9)}`); 
@@ -32,10 +33,10 @@ let {
       >
         <Label.Root 
           for={btnGrpId + option.value} 
-          class="button-label"
+          class="button-label {stack ? 'stack' : ''}"
         >
           {#if option.icon}
-            <span style:font-size="7px">{@render option.icon({ class: "button-icon" })}</span>
+            <span style:font-size="var(--icon-size, 7px)">{@render option.icon({ class: "button-icon" })}</span>
           {/if}
           {option.label}
         </Label.Root>
@@ -60,7 +61,7 @@ let {
   :global(.btn-grp-label) {
     font-size: 12px;
     color: var(--app-500);
-    max-width: var(--min-width, 100%);
+    max-width: 100%;
     text-align: right;
     /* white-space: nowrap; */
   }
@@ -88,7 +89,8 @@ let {
     letter-spacing: -0.5px;
     cursor: pointer;
     border-right: none;
-    max-width: 50px;
+    max-width: var(--max-width, 50px);
+    min-width: var(--min-width, 0px);
   }
 
   :global(.grouped-btn.active) {
@@ -114,5 +116,17 @@ let {
 
   :global(.grouped-btn.active .button-icon) {
     color: var(--app-900);
+  }
+
+  :global(.button-label) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    user-select: none;
+  }  
+  
+  :global(.button-label.stack) {
+    display: block;
   }
 </style>

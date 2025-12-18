@@ -9,7 +9,7 @@
   import SvgIcon from '$lib/assets/svg.svg';
   import FigmaIcon from '~icons/ph/figma-logo';
   import ArrayIcon from '~icons/material-symbols/data-array-rounded';
-  import WarnIcon from '~icons/mdi/exclamation-thick';
+  import WarnIcon from '~icons/material-symbols/warning-outline';
   import CheckIcon from '~icons/material-symbols/check-rounded';
   import ColourIcon from '~icons/tabler/color-filter';
   import { getSimulatedColors, isColorBlindSafe } from '$lib/helpers/colorBlind.js';
@@ -19,6 +19,7 @@
   import Tooltip from '$lib/components/Tooltip.svelte';
   import ButtonGroup from '$lib/components/ButtonGroup.svelte';
   import Toggle from '$lib/components/Toggle.svelte';
+	import ColourTests from '$lib/components/ColourTests.svelte';
 	
   const colourSpaces = [
     { label: 'LAB', value: 'lab', icon: ColourIcon },
@@ -30,6 +31,8 @@
     { label: 'HSV', value: 'hsv', icon: ColourIcon },
     { label: 'RGB', value: 'rgb', icon: ColourIcon },
   ];
+
+
 
   
   let inputValue = $state("lightyellow, f8f, '#02439e'");
@@ -45,7 +48,9 @@
   let toastOn = $state(false);
   let toastEvent = $state(null);
   let clipboardMessage = $state('');
-  let colorBlindType = $state('deuteranopia');
+  let resultsView = $state('lightness');
+  
+
 
 
   // let appColours = $derived(getTailwindColors(backgroundColor, {asHex: true}));
@@ -64,7 +69,6 @@
   let parsedNames = $derived(nameParse(inputValue));
   let parsedColours = $derived(colourParse(inputValue || '#000000'));
   let transformedColours = $derived(interpolateColors(parsedColours));
-  let colorBlindColours = $derived(getSimulatedColors(transformedColours, colorBlindType));
   let outputNames = $derived(getDefaultNameVals(transformedColours.length));
   let lightnessArray = $derived(transformedColours.map(c => chroma(c).lab()[0]));
   // let colourNameSuggestion = $derived(() => {
@@ -75,15 +79,15 @@
   //   return baseName;
   // }); 
 
-  let colourBlindnessTypesWarn = $derived(
-    [
-      { label: 'deutan', value: 'deuteranopia', icon: isColorBlindSafe(transformedColours, 'protanopia').length < 1 ? CheckIcon : WarnIcon },
-      { label: 'protan', value: 'protanopia', icon: isColorBlindSafe(transformedColours, 'deuteranopia').length < 1 ? CheckIcon : WarnIcon },
-      { label: 'tritan', value: 'tritanopia', icon: isColorBlindSafe(transformedColours, 'tritanopia').length < 1 ? CheckIcon : WarnIcon },
-    ]
-  );
+  
+  const colourBlindnessTypes = ['protanopia', 'deuteranopia', 'tritanopia'];
+  let colourBlindWarn = $derived(colourBlindnessTypes.some((d) => isColorBlindSafe(transformedColours, d).length > 1));
 
-  $inspect(colourBlindnessTypesWarn);
+  let resultsViews = $derived([
+    { label: 'perceptual lightness', value: 'lightness' },
+    { label: 'colour blindness', value: 'blindness', icon: colourBlindWarn ? WarnIcon : null },
+  ]);
+
   
   // Transform for MultiLineChart - expects array of objects with series
   let lightnessChartData = $derived(
@@ -277,7 +281,8 @@
       9: [100, 200, 300, 400, 500, 600, 700, 800, 900],
       10: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900],
       11: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950],
-      12: [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+      12: [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950],
+      13: [20, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950, 980],
     };
     return stepMap[length] || Array.from({length: length}, (_, i) => (i+1)*100);
   }
@@ -599,7 +604,8 @@
       {/each}
     </svg>
 
-    {#if lightnessArray.length > 0}
+    
+    {#if lightnessArray.length > 0 && resultsView === 'lightness'}
       <div class="chart-container">
         <MultiLineChart 
           data={lightnessChartData} 
@@ -613,28 +619,19 @@
           title="perceptual lightness"
         />
       </div>
+    {:else if resultsView === 'blindness'}
+      
+      <ColourTests colours={transformedColours} bind:warn={colourBlindWarn} />
 
     {/if}
 
+
+
     <div style="display: flex; align-items: center; justify-content: center;">
-      <ButtonGroup bind:selected={colorBlindType} options={colourBlindnessTypesWarn} label="colour blindness" />
+      <ButtonGroup bind:selected={resultsView} options={resultsViews} stack={false} --max-width="150px" --min-width="140px" --icon-size="14px" />
     </div>
-    <svg bind:this={svgRef} viewBox="0 0 1000 40" xmlns="http://www.w3.org/2000/svg">
-      {#each colorBlindColours as colour, i}
-        <Swatch 
-          {colour} 
-          name={outputNames[i]} 
-          x={i*Math.min(15000, 1006/numColours)} 
-          width={Math.min(15000,1006/numColours-6)} 
-          short={true}
-          warn = {isColorBlindSafe(transformedColours, colorBlindType).includes(colour)}
-        />
-      {/each}
-    </svg>
       
-    <a href="https://www.ncbi.nlm.nih.gov/books/NBK11538/table/ch28kallcolor.T1/" target="_blank" rel="noopener noreferrer">
-      reference
-    </a>
+
 
 
   </div>
