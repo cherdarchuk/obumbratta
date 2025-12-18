@@ -1,5 +1,6 @@
 <script>
   import chroma from "chroma-js";
+  import WarnIcon from '~icons/material-symbols/warning-outline-rounded';
 
 	const { 
     colour = 'grey',
@@ -8,6 +9,8 @@
     width = 84,
     div = false,
     oncopy,
+    short = false,
+    warn = false,
   } = $props();
 
   function getTextColor(backgroundColor) {
@@ -27,9 +30,17 @@
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <!-- svelte-ignore a11y_no_static_element_interactions -->
   <g onclick={(e) => { oncopy?.(colour, { target: e.currentTarget, clientX: e.clientX, clientY: e.clientY }, colour); }}>
-    <rect {x} {width} height={100} fill={colour} rx="8" />
-    <text x="{x + width/2}" y="55" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
-    <text x="{x + width/2}" y={"70"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text>
+
+    <rect {x} {width} height={short ? 40 : 100} fill={colour} rx="8" />
+    {#if !short}
+      <text x="{x + width/2}" y="55" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
+      <text x="{x + width/2}" y={"70"} font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text>
+    {/if}
+    {#if warn}
+      <foreignObject x={x + width/2 - 12} y={2 + (short ? 40 : 100)/2 - 12} width="24" height="24">
+        <WarnIcon width="24" height="20" color={getTextColor(colour)} />
+      </foreignObject>
+    {/if}
   </g>
 {:else}
   <div class="swatch" style="background-color: {colour}; color: {getTextColor(colour)}; width: {width}px;">
@@ -42,7 +53,6 @@
     height: 32px;
     border-radius: 8px;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     font-size: 12px;

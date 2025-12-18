@@ -9,7 +9,9 @@
   import SvgIcon from '$lib/assets/svg.svg';
   import FigmaIcon from '~icons/ph/figma-logo';
   import ArrayIcon from '~icons/material-symbols/data-array-rounded';
+  import WarnIcon from '~icons/material-symbols/warning-rounded';
   import ColourIcon from '~icons/tabler/color-filter';
+  import { getSimulatedColors, isColorBlindSafe } from '$lib/helpers/colorBlind.js';
 
   import Swatch from '$lib/components/Swatch.svelte';
   import MultiLineChart from '$lib/components/MultiLineChart.svelte';
@@ -27,6 +29,7 @@
     { label: 'HSV', value: 'hsv', icon: ColourIcon },
     { label: 'RGB', value: 'rgb', icon: ColourIcon },
   ];
+
   
   let inputValue = $state("lightyellow, f8f, '#02439e'");
   let nameValue = $state('');
@@ -41,6 +44,7 @@
   let toastOn = $state(false);
   let toastEvent = $state(null);
   let clipboardMessage = $state('');
+  let colorBlindType = $state('deuteranopia');
 
 
   // let appColours = $derived(getTailwindColors(backgroundColor, {asHex: true}));
@@ -59,15 +63,26 @@
   let parsedNames = $derived(nameParse(inputValue));
   let parsedColours = $derived(colourParse(inputValue || '#000000'));
   let transformedColours = $derived(interpolateColors(parsedColours));
+  let colorBlindColours = $derived(getSimulatedColors(transformedColours, colorBlindType));
   let outputNames = $derived(getDefaultNameVals(transformedColours.length));
   let lightnessArray = $derived(transformedColours.map(c => chroma(c).lab()[0]));
-  let colourNameSuggestion = $derived(() => {
-    if (parsedColours.length === 0) return 'color-name';
-    const firstColour = parsedColours[0];
-    const ntcMatch = ntc.name(firstColour);
-    let baseName = ntcMatch[1].toLowerCase().replace(/\s+/g, '-');
-    return baseName;
-  }); 
+  // let colourNameSuggestion = $derived(() => {
+  //   if (parsedColours.length === 0) return 'color-name';
+  //   const firstColour = parsedColours[0];
+  //   const ntcMatch = ntc.name(firstColour);
+  //   let baseName = ntcMatch[1].toLowerCase().replace(/\s+/g, '-');
+  //   return baseName;
+  // }); 
+
+  let colourBlindnessTypesWarn = $derived(
+    [
+      { label: 'deutan', value: 'deuteranopia', icon: isColorBlindSafe(transformedColours, 'protanopia').length < 1 ? undefined : WarnIcon },
+      { label: 'protan', value: 'protanopia', icon: isColorBlindSafe(transformedColours, 'deuteranopia').length < 1 ? undefined : WarnIcon },
+      { label: 'tritan', value: 'tritanopia', icon: isColorBlindSafe(transformedColours, 'tritanopia').length < 1 ? undefined : WarnIcon },
+    ]
+  );
+
+  $inspect(colourBlindnessTypesWarn);
   
   // Transform for MultiLineChart - expects array of objects with series
   let lightnessChartData = $derived(
@@ -599,6 +614,28 @@
       </div>
 
     {/if}
+
+    <div style="display: flex; align-items: center; justify-content: center;">
+      <ButtonGroup bind:selected={colorBlindType} options={colourBlindnessTypesWarn} label="colour blindness" />
+    </div>
+    <svg bind:this={svgRef} viewBox="0 0 1000 40" xmlns="http://www.w3.org/2000/svg">
+      {#each colorBlindColours as colour, i}
+        <Swatch 
+          {colour} 
+          name={outputNames[i]} 
+          x={i*Math.min(15000, 1006/numColours)} 
+          width={Math.min(15000,1006/numColours-6)} 
+          short={true}
+          warn = {isColorBlindSafe(transformedColours, colorBlindType).includes(colour)}
+        />
+      {/each}
+    </svg>
+      
+    <a href="https://www.ncbi.nlm.nih.gov/books/NBK11538/table/ch28kallcolor.T1/" target="_blank" rel="noopener noreferrer">
+      reference
+    </a>
+
+
   </div>
 
   {#if toastOn && toastEvent}
@@ -674,6 +711,10 @@
     width: 100%;
   }
 
+  .box:last-child {
+    margin-bottom: 70px;
+  }
+
   input {
     display: block;
     font-size: 16px;
@@ -742,17 +783,6 @@
     background-color: var(--sel-background);
   }
 
-  .mq-mobile.container {
-    padding: 0 24px;
-  }
-
-  h1 {
-    text-align: center;
-    font-size: 1.75rem;
-    max-width: 800px;
-    margin: auto;
-    letter-spacing: -0.05em;
-  }
 
   h2 {
     color: var(--app-800);
@@ -771,10 +801,6 @@
     width: 100%;
   }
 
-  h2.mq-mobile{
-    position: relative;
-    top: 0;
-  }
 
 
   h3 {
@@ -783,11 +809,6 @@
     color: var(--grey-600);
   }
 
-  .break {
-    margin: 2.5rem auto;
-    width: 2rem;
-    border-bottom: 1px solid var(--app-400);
-  }
 
   .small-label {
     font-size:12px; 

@@ -60,7 +60,7 @@ let {
   :global(.btn-grp-label) {
     font-size: 12px;
     color: var(--app-500);
-    width: 80px;
+    max-width: var(--min-width, 100%);
     text-align: right;
     /* white-space: nowrap; */
   }
@@ -106,5 +106,13 @@ let {
     border-radius: 0 6px 6px 0;
     margin-right: 0px;
     border-right: 1px solid var(--app-100);
+  }
+
+  :global(.button-icon) {
+    color: var(--app-600);
+  }
+
+  :global(.grouped-btn.active .button-icon) {
+    color: var(--app-900);
   }
 </style>
