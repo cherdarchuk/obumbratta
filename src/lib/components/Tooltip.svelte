@@ -67,6 +67,7 @@
     position: fixed;
     z-index: 100;
     pointer-events: none;
+    will-change: transform;
   }
 
   /* global style for tooltips */

@@ -9,7 +9,8 @@
   import SvgIcon from '$lib/assets/svg.svg';
   import FigmaIcon from '~icons/ph/figma-logo';
   import ArrayIcon from '~icons/material-symbols/data-array-rounded';
-  import WarnIcon from '~icons/material-symbols/warning-rounded';
+  import WarnIcon from '~icons/mdi/exclamation-thick';
+  import CheckIcon from '~icons/material-symbols/check-rounded';
   import ColourIcon from '~icons/tabler/color-filter';
   import { getSimulatedColors, isColorBlindSafe } from '$lib/helpers/colorBlind.js';
 
@@ -76,9 +77,9 @@
 
   let colourBlindnessTypesWarn = $derived(
     [
-      { label: 'deutan', value: 'deuteranopia', icon: isColorBlindSafe(transformedColours, 'protanopia').length < 1 ? undefined : WarnIcon },
-      { label: 'protan', value: 'protanopia', icon: isColorBlindSafe(transformedColours, 'deuteranopia').length < 1 ? undefined : WarnIcon },
-      { label: 'tritan', value: 'tritanopia', icon: isColorBlindSafe(transformedColours, 'tritanopia').length < 1 ? undefined : WarnIcon },
+      { label: 'deutan', value: 'deuteranopia', icon: isColorBlindSafe(transformedColours, 'protanopia').length < 1 ? CheckIcon : WarnIcon },
+      { label: 'protan', value: 'protanopia', icon: isColorBlindSafe(transformedColours, 'deuteranopia').length < 1 ? CheckIcon : WarnIcon },
+      { label: 'tritan', value: 'tritanopia', icon: isColorBlindSafe(transformedColours, 'tritanopia').length < 1 ? CheckIcon : WarnIcon },
     ]
   );
 
@@ -579,7 +580,7 @@
       <div class="group-of-buttons-w-label">
         <div class="small-label">export</div>
         <div class="button-section">
-          <button onclick={(e) => copyToClipboard("'" + transformedColours.toString().replace(/,/g, "', '") + "'",e, "Array")}><ArrayIcon height={20} width={20} /></button>
+          <button onclick={(e) => copyToClipboard("['" + transformedColours.toString().replace(/,/g, "', '") + "']",e, "Array")}><ArrayIcon height={20} width={20} /></button>
           <button onclick={(e) => copyToClipboard(outputCssValue, e, "CSS")}><CssIcon height={20} width={20} /></button>
           <button onclick={(e) => copyToClipboard(getSVG(), e, "SVG")}><SvgIcon height={20} width={20} /></button>
           <button onclick={(e) => copyToClipboard(outputFigmaValue, e, "Figma import")}><FigmaIcon height={20} width={20} /></button>
@@ -638,17 +639,17 @@
 
   </div>
 
-  {#if toastOn && toastEvent}
-    <div transition:fade>
-      <Tooltip mouseEvent={toastEvent} centered={true}>
-        <div class="tip-text">
-          {clipboardMessage}
-        </div>
-      </Tooltip>
-    </div>
-  {/if}
-
 </div>
+
+{#if toastOn && toastEvent}
+  <div class="toast-wrapper" transition:fade={{ duration: 200 }} style={appColoursCss}>
+    <Tooltip mouseEvent={toastEvent} centered={true}>
+      <div class="tip-text">
+        {clipboardMessage}
+      </div>
+    </Tooltip>
+  </div>
+{/if}
 
 
 <style>
@@ -778,7 +779,7 @@
     flex-direction: column;
     gap: 20px;
     max-width: 1080px;
-    margin: 70px auto 0px;
+    margin: 0 auto 0px;
     padding: 20px;
     background-color: var(--sel-background);
   }
@@ -792,14 +793,10 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
     display: table;
-    border-radius: 3px ;
-  }
-
-  h2 {
-    position: sticky;
-    top: 70px;
+    border-radius: 3px;
     width: 100%;
   }
+
 
 
 
@@ -828,6 +825,12 @@
     background-color: var(--chart-background);
   }
 
+  .toast-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
 
 
 </style>

@@ -3,7 +3,6 @@
 	import '$lib/styles/app.css';
 </script>
 
-<slot></slot>
 
 <div class="full-width">
   <div class="header">
@@ -21,6 +20,7 @@
 </div>
 
 
+<slot></slot>
 
 
 <div class="full-width-foot">
@@ -34,12 +34,15 @@
 
 <style>
   .full-width {
-    position: fixed;
+    position: sticky;
     top: 0;
     width: 100%;
+    z-index: 10;
     background-color: var(--back-colour);
   }
   .header {
+    position: sticky;
+    top: 0;
     display: flex;
     justify-content: space-between ;
     align-items: center;
@@ -48,6 +51,8 @@
     margin: auto;
     padding: 0 40px;
     width: 100%;
+    z-index: 2;
+    background-color: var(--back-colour);
   }
   nav {
     display: flex;
