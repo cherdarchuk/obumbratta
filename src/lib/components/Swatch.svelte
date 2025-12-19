@@ -11,6 +11,7 @@
     oncopy,
     short = false,
     warn = false,
+    onchange,
   } = $props();
 
   function getTextColor(backgroundColor) {
@@ -47,8 +48,17 @@
     {/if}
   </g>
 {:else}
-  <div class="swatch" style="background-color: {colour}; color: {getTextColor(colour)}; width: {width}px;">
+  <div class="swatch" style="background-color: {colour}; color: {getTextColor(colour)}; width: {width}px; position: relative;">
     {name}
+    {#if onchange}
+      <input 
+        type="color" 
+        value={chroma.valid(colour) ? chroma(colour).hex() : '#000000'} 
+        oninput={(e) => onchange(e.target.value)} 
+        onclick={(e) => e.stopPropagation()}
+        style="opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" 
+      />
+    {/if}
   </div>
 {/if}
 

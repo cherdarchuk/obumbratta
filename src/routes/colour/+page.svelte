@@ -49,6 +49,7 @@
   let toastEvent = $state(null);
   let clipboardMessage = $state('');
   let resultsView = $state('lightness');
+  let testColour = $state('#ff0000');
   
 
 
@@ -68,6 +69,7 @@
 
   let parsedNames = $derived(nameParse(inputValue));
   let parsedColours = $derived(colourParse(inputValue || '#000000'));
+  let divergingColour = $derived(checkDivergingColors(parsedColours));
   let transformedColours = $derived(interpolateColors(parsedColours));
   let outputNames = $derived(getDefaultNameVals(transformedColours.length));
   let lightnessArray = $derived(transformedColours.map(c => chroma(c).lab()[0]));
@@ -183,18 +185,62 @@
       return colorResult;
     }
 
-    scale = colorSpace === 'lab-bezier'
-      ? chroma.bezier(colourList).scale()
-      : chroma.scale(colourList).mode(colorSpace);
+    let colorResult;
+    if (divergingColour == '') {
+      scale = colorSpace === 'lab-bezier'
+        ? chroma.bezier(colourList).scale()
+        : chroma.scale(colourList).mode(colorSpace);
 
-    let colorResult = scale.correctLightness(correctLightness).domain(domainVals).colors(numColours);
+      colorResult = scale.correctLightness(correctLightness).domain(domainVals).colors(numColours);
+    } else {
+      const midIndex = colourList.indexOf(divergingColour);
+      const firstHalf = colourList.slice(0, midIndex + 1);
+      const secondHalf = colourList.slice(midIndex);
+
+      const scale1 = colorSpace === 'lab-bezier'
+        ? chroma.bezier(firstHalf).scale()
+        : chroma.scale(firstHalf).mode(colorSpace);
+
+      const scale2 = colorSpace === 'lab-bezier'
+        ? chroma.bezier(secondHalf).scale()
+        : chroma.scale(secondHalf).mode(colorSpace);
+
+      const halfNum = Math.floor(numColours / 2);
+      const colors1 = scale1.correctLightness(correctLightness).domain([0, 1]).colors(halfNum + 1);
+      const colors2 = scale2.correctLightness(correctLightness).domain([0, 1]).colors(numColours - halfNum);
+
+      colorResult = [...colors1.slice(0, -1), ...colors2];
+    }
 
     // If keepOriginal is true, replace closest colors with original colors
     if (keepOriginal) {
+      const usedIndices = new Set();
+
+      // Mark indices that already match original colors
+      colorResult.forEach((result, index) => {
+        const resultHex = chroma(result).hex().toLowerCase();
+        if (colourList.some(c => chroma(c).hex().toLowerCase() === resultHex)) {
+          usedIndices.add(index);
+        }
+      });
+
       // Identify colors from colourList that are not in colorResult
-      const originalColors = colourList.filter(original => {
+      let originalColors = colourList.filter(original => {
         const originalHex = chroma(original).hex().toLowerCase();
         return !colorResult.some(result => chroma(result).hex().toLowerCase() === originalHex);
+      });
+
+      // Sort original colors by their distance to the closest color in the result (most different first)
+      originalColors.sort((a, b) => {
+        const getMinDist = (color) => {
+          let min = Infinity;
+          colorResult.forEach(result => {
+            const dist = chroma.distance(color, result);
+            if (dist < min) min = dist;
+          });
+          return min;
+        };
+        return getMinDist(b) - getMinDist(a);
       });
 
       // For each original color not in the result, find and replace the closest color
@@ -203,6 +249,8 @@
         let closestIndex = -1;
 
         colorResult.forEach((result, index) => {
+          if (usedIndices.has(index)) return;
+
           const distance = chroma.distance(original, result);
           if (distance < minDistance) {
             minDistance = distance;
@@ -212,6 +260,7 @@
 
         if (closestIndex !== -1) {
           colorResult[closestIndex] = chroma(original).hex();
+          usedIndices.add(closestIndex);
         }
       });
     }
@@ -220,6 +269,145 @@
   }
 
  
+
+  function checkDivergingColors(colours) {
+    if (colours.length < 3) return '';
+
+    const firstL = chroma(colours[0]).lab()[0];
+    const lastL = chroma(colours[colours.length - 1]).lab()[0];
+    
+    const minEndpointL = Math.min(firstL, lastL);
+    const maxEndpointL = Math.max(firstL, lastL);
+
+    let maxMiddleL = -Infinity;
+    let maxMiddleColor = '';
+    let minMiddleL = Infinity;
+    let minMiddleColor = '';
+
+    for (let i = 1; i < colours.length - 1; i++) {
+      const c = colours[i];
+      const l = chroma(c).lab()[0];
+      
+      if (l > maxMiddleL) {
+        maxMiddleL = l;
+        maxMiddleColor = c;
+      }
+      if (l < minMiddleL) {
+        minMiddleL = l;
+        minMiddleColor = c;
+      }
+    }
+
+    if (maxMiddleL > maxEndpointL) {
+      return maxMiddleColor;
+    }
+    if (minMiddleL < minEndpointL) {
+      return minMiddleColor;
+    }
+
+    return '';
+  }
+
+  let draggingIndex = $state(null);
+
+  function handleDragStart(e, index) {
+    draggingIndex = index;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  function handleDragOver(e, index) {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  }
+
+  function handleDrop(e, index) {
+    e.preventDefault();
+    if (draggingIndex === null) return;
+    
+    reorderInputColours(draggingIndex, index);
+    draggingIndex = null;
+  }
+
+  function reorderInputColours(fromIndex, toIndex) {
+    if (fromIndex === toIndex) return;
+
+    const separators = /([;,]+)/;
+    const rawParts = inputValue.split(separators);
+    
+    let colorIndices = [];
+    
+    for (let i = 0; i < rawParts.length; i++) {
+      const part = rawParts[i];
+      if (part.match(/^[;,]+$/)) continue;
+      
+      const cleanedPart = part.replace(/[\[\]'"]+/g, '');
+      if (!cleanedPart.trim()) continue;
+      
+      colorIndices.push(i);
+    }
+
+    if (fromIndex >= colorIndices.length || toIndex >= colorIndices.length) return;
+
+    // Extract contents
+    const contents = colorIndices.map(idx => rawParts[idx]);
+    
+    // Reorder contents
+    const [movedItem] = contents.splice(fromIndex, 1);
+    contents.splice(toIndex, 0, movedItem);
+    
+    // Put back
+    colorIndices.forEach((rawIdx, i) => {
+      rawParts[rawIdx] = contents[i];
+    });
+    
+    inputValue = rawParts.join('');
+  }
+
+  function updateInputColour(index, newHex) {
+    const separators = /([;,]+)/;
+    const rawParts = inputValue.split(separators);
+    
+    let colorCount = 0;
+    let newInputValue = "";
+    
+    for (let i = 0; i < rawParts.length; i++) {
+      const part = rawParts[i];
+      
+      // If it's a separator, just append
+      if (part.match(/^[;,]+$/)) {
+        newInputValue += part;
+        continue;
+      }
+      
+      const cleanedPart = part.replace(/[\[\]'"]+/g, '');
+      if (!cleanedPart.trim()) {
+        newInputValue += part;
+        continue;
+      }
+      
+      // It's a color
+      if (colorCount === index) {
+        // Replace this part
+        const match = part.match(/^([^:]+:)(\s*)(.+)$/);
+        if (match) {
+           // preserve name
+           newInputValue += match[1] + match[2] + newHex;
+        } else {
+           // preserve whitespace
+           const leadingSpace = part.match(/^\s*/)[0];
+           const trailingSpace = part.match(/\s*$/)[0];
+           newInputValue += leadingSpace + newHex + trailingSpace;
+        }
+      } else {
+        newInputValue += part;
+      }
+      
+      colorCount++;
+    }
+    
+    inputValue = newInputValue;
+  }
 
   function tailwindifyInput(colours) {
     console.log('Input colours:', colours);
@@ -517,7 +705,23 @@
 
     <div class="swatch-row">
         {#each parsedColours as colour, i}
-          <Swatch {colour} name={colour} x={i*72} width={68} div={true}   />
+          <div
+            role="group"
+            draggable={true}
+            ondragstart={(e) => handleDragStart(e, i)}
+            ondrop={(e) => handleDrop(e, i)}
+            ondragover={(e) => handleDragOver(e, i)}
+            style="cursor: grab;"
+          >
+            <Swatch 
+              {colour} 
+              name={colour} 
+              x={i*72} 
+              width={68} 
+              div={true} 
+              onchange={(newHex) => updateInputColour(i, newHex)} 
+            />
+          </div>
         {/each}
     </div>
   </div>
@@ -695,6 +899,15 @@
     align-items: center;
     flex-wrap: wrap;
   }
+  .swatch-row input {
+		width: 68px;
+		height: 32px;
+		border: 0;
+		padding: 0;
+		background: transparent;
+		position: absolute;
+		opacity: 0.5;
+	}
 
   .box {
     display: flex;
