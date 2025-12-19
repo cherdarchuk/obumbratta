@@ -3,6 +3,7 @@
   import { getTailwindColors } from "uicolors-generator";
   import { fade } from 'svelte/transition';
   import { copyToClipboard as copyToClipboardCall } from '$lib/helpers/utils.js';
+  import { getClosestColorName } from '$lib/helpers/colorName.js';
 
 
   import CssIcon from '$lib/assets/css.svg';
@@ -12,7 +13,7 @@
   import WarnIcon from '~icons/material-symbols/warning-outline';
   import CheckIcon from '~icons/material-symbols/check-rounded';
   import ColourIcon from '~icons/tabler/color-filter';
-  import { getSimulatedColors, isColorBlindSafe } from '$lib/helpers/colorBlind.js';
+  import { isColorBlindSafe } from '$lib/helpers/colorBlind.js';
 
   import Swatch from '$lib/components/Swatch.svelte';
   import MultiLineChart from '$lib/components/MultiLineChart.svelte';
@@ -49,7 +50,6 @@
   let toastEvent = $state(null);
   let clipboardMessage = $state('');
   let resultsView = $state('lightness');
-  let testColour = $state('#ff0000');
   
 
 
@@ -73,13 +73,14 @@
   let transformedColours = $derived(interpolateColors(parsedColours));
   let outputNames = $derived(getDefaultNameVals(transformedColours.length));
   let lightnessArray = $derived(transformedColours.map(c => chroma(c).lab()[0]));
-  // let colourNameSuggestion = $derived(() => {
-  //   if (parsedColours.length === 0) return 'color-name';
-  //   const firstColour = parsedColours[0];
-  //   const ntcMatch = ntc.name(firstColour);
-  //   let baseName = ntcMatch[1].toLowerCase().replace(/\s+/g, '-');
-  //   return baseName;
-  // }); 
+  let colourNameSuggestion = $derived(
+    transformedColours.length > 0 
+      ? getClosestColorName(transformedColours[Math.floor(transformedColours.length/2)])
+          .replace(/([a-z])([A-Z])/g, '$1-$2')
+          .toLowerCase()
+          .replace(/\s+/g, '-') 
+      : 'colour-name'
+  );
 
   
   const colourBlindnessTypes = ['protanopia', 'deuteranopia', 'tritanopia'];
@@ -528,7 +529,7 @@
   function getCSS(colours, names = []) {
 
     // Use nameValue or fallback to "color"
-    const baseName = nameValue.trim() ? nameValue.trim().toLowerCase().replace(/\s+/g, '-') : 'colour-name';
+    const baseName = nameValue.trim() ? nameValue.trim().toLowerCase().replace(/\s+/g, '-') : colourNameSuggestion;
     let css
 
     if (names.length !== colours.length) {
@@ -736,24 +737,13 @@
           id="name-input"
           type="text"
           bind:value={nameValue}
-          placeholder="colour-name"
+          placeholder={colourNameSuggestion}
           style="width: 174px;"
           autocomplete="off"
         />
       </div>
     </div>  
     <div class="row bottom-align">  
-      <!-- <div>
-        <label for="num-colours">Extend Start</label>
-        <input
-          id="start-extend"
-          type="number"
-          bind:value={startExtend}
-          min="0"
-          max="10"
-          style="width: 100px;"
-        />
-      </div> -->
 
 
 
