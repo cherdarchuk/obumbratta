@@ -62,6 +62,19 @@
   let toastEvent = $state(null);
   let clipboardMessage = $state('');
   
+  let hoverTooltipEvent = $state(null);
+  let hoverTooltipText = $state('');
+
+  function showTooltip(e, text) {
+    hoverTooltipEvent = e;
+    hoverTooltipText = text;
+  }
+
+  function hideTooltip() {
+    hoverTooltipEvent = null;
+    hoverTooltipText = '';
+  }
+  
 
 
 
@@ -164,7 +177,8 @@
 
   function handleDrop(e, index) {
     e.preventDefault();
-    if (draggingIndex === null) return;
+    e.stopPropagation();
+    if (draggingIndex === null || index === null) return;
     
     inputValue = reorderInputColours(inputValue, draggingIndex, index);
     draggingIndex = null;
@@ -208,15 +222,22 @@
   
 
    
-  async function copyToClipboard(text, e, type="") {
+  function showToast(e, message) {
+    hideTooltip();
     toastEvent = e;
-    let result = await copyToClipboardCall(text);
-    clipboardMessage = result.success ? type + ' copied to clipboard' : 'Failed to copy to clipboard.';
+    clipboardMessage = message;
     toastOn = true;
     setTimeout(() => { toastOn = false; }, 1400);
   }
 
-  function reverseColours() {
+  async function copyToClipboard(text, e, type="") {
+    hideTooltip();
+    let result = await copyToClipboardCall(text);
+    showToast(e, result.success ? type + ' copied to clipboard' : 'Failed to copy to clipboard.');
+  }
+
+  function reverseColours(e) {
+    hideTooltip();
     // Split on commas or newlines, trim, filter out empty, reverse, and join with commas
     const reversed = inputValue
       .split(/[;,]+/)
@@ -225,10 +246,12 @@
       .reverse()
       .join(', ');
     inputValue = reversed;
+    showToast(e, 'Input reversed');
   }
 
-  function cleanColours() {
+  function cleanColours(e) {
     inputValue = parsedColours.toString().replace(/,/g, ", ");
+    showToast(e, 'Input cleaned');
   }
 
   function spaceToComma() {
@@ -236,15 +259,17 @@
     inputValue = commas;
   }
 
-  function applyTailwindify() {
+  function applyTailwindify(e) {
     const newInput = tailwindifyInput(parsedColours);
     inputValue = newInput;
+    showToast(e, 'Input extended');
 
     // transformedColours = tailwindify(parsedColours);
   }
 
-  function clearInput() {
+  function clearInput(e) {
     inputValue = '';
+    showToast(e, 'Input cleared');
   }
 
 </script>
@@ -256,13 +281,39 @@
     <div class="row">
       <h2>Inputs</h2>
       <div class="button-section">
-        <button onclick={cleanColours}>clean</button>
-        <button onclick={reverseColours}>reverse</button>
+        <button 
+          onclick={(e) => cleanColours(e)}
+          onmouseenter={(e) => showTooltip(e, "clean input format")}
+          onmouseleave={hideTooltip}
+        >clean</button>
+        <button 
+          onclick={(e) => reverseColours(e)}
+          onmouseenter={(e) => showTooltip(e, "reverse input order")}
+          onmouseleave={hideTooltip}
+        >reverse</button>
         <!-- <button onclick={spaceToComma}>delimit</button> -->
-        <button onclick={applyTailwindify}>extend</button>
-        <button onclick={clearInput}>clear</button>
-        <button onclick={(e) => copyToClipboard(inputCssValue, e, "CSS")} class="desktop-only"><CssIcon height={20} width={20}/></button>
-        <button onclick={(e) => copyToClipboard(inputFigmaValue, e, "Figma import")} class="desktop-only"><FigmaIcon height={20} width={20} /></button>
+        <button 
+          onclick={(e) => applyTailwindify(e)}
+          onmouseenter={(e) => showTooltip(e, "extend input colors")}
+          onmouseleave={hideTooltip}
+        >extend</button>
+        <button 
+          onclick={(e) => clearInput(e)}
+          onmouseenter={(e) => showTooltip(e, "clear all inputs")}
+          onmouseleave={hideTooltip}
+        >clear</button>
+        <button 
+          onclick={(e) => copyToClipboard(inputCssValue, e, "CSS")} 
+          class="desktop-only"
+          onmouseenter={(e) => showTooltip(e, "copy input as CSS")}
+          onmouseleave={hideTooltip}
+        ><CssIcon height={20} width={20}/></button>
+        <button 
+          onclick={(e) => copyToClipboard(inputFigmaValue, e, "Figma import")} 
+          class="desktop-only"
+          onmouseenter={(e) => showTooltip(e, "copy input for Figma")}
+          onmouseleave={hideTooltip}
+        ><FigmaIcon height={20} width={20} /></button>
         <!-- <label for="background-color">Background:</label>
         <input type="color" id="background-color" name="background-color" bind:value={backgroundColor}> -->
       </div>
@@ -279,7 +330,12 @@
 
 
 
-    <div class="swatch-row">
+    <div 
+      class="swatch-row"
+      role="group"
+      ondragover={(e) => e.preventDefault()}
+      ondrop={(e) => handleDrop(e, dragOverIndex)}
+    >
         {#each parsedColours as colour, i}
           <div
             role="group"
@@ -359,10 +415,26 @@
       <div class="group-of-buttons-w-label">
         <div class="small-label">export</div>
         <div class="button-section">
-          <button onclick={(e) => copyToClipboard("['" + transformedColours.toString().replace(/,/g, "', '") + "']",e, "Array")}><ArrayIcon height={20} width={20} /></button>
-          <button onclick={(e) => copyToClipboard(outputCssValue, e, "CSS")}><CssIcon height={20} width={20} /></button>
-          <button onclick={(e) => copyToClipboard(getSVG(), e, "SVG")}><SvgIcon height={20} width={20} /></button>
-          <button onclick={(e) => copyToClipboard(outputFigmaValue, e, "Figma import")}><FigmaIcon height={20} width={20} /></button>
+          <button 
+            onclick={(e) => copyToClipboard("['" + transformedColours.toString().replace(/,/g, "', '") + "']",e, "Array")}
+            onmouseenter={(e) => showTooltip(e, "copy as JS Array")}
+            onmouseleave={hideTooltip}
+          ><ArrayIcon height={20} width={20} /></button>
+          <button 
+            onclick={(e) => copyToClipboard(outputCssValue, e, "CSS")}
+            onmouseenter={(e) => showTooltip(e, "copy as CSS")}
+            onmouseleave={hideTooltip}
+          ><CssIcon height={20} width={20} /></button>
+          <button 
+            onclick={(e) => copyToClipboard(getSVG(), e, "SVG")}
+            onmouseenter={(e) => showTooltip(e, "copy as SVG")}
+            onmouseleave={hideTooltip}
+          ><SvgIcon height={20} width={20} /></button>
+          <button 
+            onclick={(e) => copyToClipboard(outputFigmaValue, e, "Figma import")}
+            onmouseenter={(e) => showTooltip(e, "copy for Figma")}
+            onmouseleave={hideTooltip}
+          ><FigmaIcon height={20} width={20} /></button>
         </div>
       </div>
     </div>
@@ -396,7 +468,14 @@
       </div>
     {:else if resultsView === 'blindness'}
       
-      <ColourTests colours={transformedColours} bind:warn={colourBlindWarn} />
+      <ColourTests 
+        colours={transformedColours} 
+        bind:warn={colourBlindWarn} 
+        onhover={(e, text) => {
+          if (e && text) showTooltip(e, text);
+          else hideTooltip();
+        }}
+      />
 
     {/if}
 
@@ -418,6 +497,16 @@
     <Tooltip mouseEvent={toastEvent} centered={true}>
       <div class="tip-text">
         {clipboardMessage}
+      </div>
+    </Tooltip>
+  </div>
+{/if}
+
+{#if hoverTooltipEvent}
+  <div class="hover-tooltip-wrapper" transition:fade={{ duration: 100 }}>
+    <Tooltip mouseEvent={hoverTooltipEvent} centered={true} yOffset={-6}>
+      <div class="hover-tip-text">
+        {hoverTooltipText}
       </div>
     </Tooltip>
   </div>
@@ -652,6 +741,25 @@
   }
   .drag-indicator.right {
     right: -4px;
+  }
+
+  .hover-tooltip-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .hover-tip-text {
+    border-radius: 6px;
+    background-color: white;
+    color: var(--app-800);
+    padding: 6px 10px;
+    font-size: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border: 1px solid var(--app-100);
+    max-width: 200px;
   }
 
 

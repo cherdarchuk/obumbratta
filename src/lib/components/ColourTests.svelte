@@ -1,10 +1,10 @@
 <script>
   import Swatch from '$lib/components/Swatch.svelte';
   import { getSimulatedColors, isColorBlindSafe } from '$lib/helpers/colorBlind.js';
-	import { get } from 'svelte/store';
 
   let {
     colours = [],
+    onhover,
   } = $props()
 
 
@@ -32,6 +32,10 @@
         width={Math.min(15000,1006/colours.length - 6)} 
         short={true}
         warn = {problems.includes(colour)}
+        onwarnhover={(e) => {
+          if (e) onhover?.(e, "Colours are significantly more similar than their counterparts");
+          else onhover?.(null);
+        }}
       />
     {/each}
   </svg>

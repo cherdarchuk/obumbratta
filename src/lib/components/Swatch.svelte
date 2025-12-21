@@ -17,6 +17,7 @@
     onchange,
     oninsert,
     onremove,
+    onwarnhover,
   } = $props();
 
   let isHovered = $state(false);
@@ -71,8 +72,8 @@
 
     <rect {x} {width} height={short ? 36 : 100} fill={colour} rx="8" />
     {#if !short}
-      <text x="{x + width/2}" y="60" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
-      <text x="{x + width/2}" y="75" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text>
+      <text x="{x + width/2}" y="58" font-weight="bold" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{name}</text>
+      <text x="{x + width/2}" y="73" font-size="12" fill={getTextColor(colour)} text-anchor="middle">{colour.replace('#', '').toUpperCase()}</text>
       
       {#if isHovered}
         {#if oninsert && isShiftHeld}
@@ -94,8 +95,15 @@
       
     
     {#if warn}
-      <g transform="translate({x + width/2 - 12}, {(short ? 36 : 100)/2 - 12})">
-        <WarnIcon width="24" height="24" color={getTextColor(colour)} />
+      <!-- svelte-ignore a11y_no_static_element_interactions -->
+      <g 
+        transform="translate({x + width/2 - 10}, {(short ? 36 : 100)/2 - 10})" 
+        opacity='0.5'
+        onmouseenter={(e) => onwarnhover?.(e)}
+        onmouseleave={(e) => onwarnhover?.(null)}
+      >
+        <rect width="20" height="20" fill="transparent" />
+        <WarnIcon width="20" height="20" color={getTextColor(colour)} />
       </g>
     {/if}
   </g>
