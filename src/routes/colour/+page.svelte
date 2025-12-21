@@ -143,6 +143,7 @@
  
 
   let draggingIndex = $state(null);
+  let dragOverIndex = $state(null);
 
   function handleDragStart(e, index) {
     draggingIndex = index;
@@ -153,6 +154,12 @@
   function handleDragOver(e, index) {
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    dragOverIndex = index;
+  }
+
+  function handleDragEnd() {
+    draggingIndex = null;
+    dragOverIndex = null;
   }
 
   function handleDrop(e, index) {
@@ -161,6 +168,7 @@
     
     inputValue = reorderInputColours(inputValue, draggingIndex, index);
     draggingIndex = null;
+    dragOverIndex = null;
   }
 
   function addColourToInput(hex, index) {
@@ -279,8 +287,12 @@
             ondragstart={(e) => handleDragStart(e, i)}
             ondrop={(e) => handleDrop(e, i)}
             ondragover={(e) => handleDragOver(e, i)}
-            style="cursor: grab;"
+            ondragend={handleDragEnd}
+            style="cursor: grab; position: relative; border-radius: 8px; opacity: 0.999"
           >
+            {#if draggingIndex !== null && dragOverIndex === i && draggingIndex !== i}
+               <div class="drag-indicator" class:left={draggingIndex > i} class:right={draggingIndex < i}></div>
+            {/if}
             <Swatch 
               {colour} 
               name={colour} 
@@ -288,7 +300,7 @@
               width={68} 
               div={true} 
               onchange={(newHex) => inputValue = updateInputColour(inputValue, i, newHex)} 
-              onremove={() => removeColourFromInput(i)}
+              onremove={draggingIndex === null ? () => removeColourFromInput(i) : undefined}
             />
           </div>
         {/each}
@@ -624,6 +636,22 @@
     top: 0;
     left: 0;
     pointer-events: none;
+  }
+
+  .drag-indicator {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background-color: var(--app-900);
+    z-index: 20;
+    pointer-events: none;
+  }
+  .drag-indicator.left {
+    left: -4px;
+  }
+  .drag-indicator.right {
+    right: -4px;
   }
 
 
