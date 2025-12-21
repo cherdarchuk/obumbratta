@@ -33,8 +33,8 @@
 	
   const colourSpaces = [
     { label: 'LAB', value: 'lab', icon: ColourIcon },
-    { label: 'OK LAB', value: 'oklab' },
     { label: 'BEZ LAB', value: 'lab-bezier'},
+    { label: 'OK LAB', value: 'oklab' },
     { label: 'LCH', value: 'lch', icon: ColourIcon },
     { label: 'OK LCH', value: 'oklch' },
     { label: 'HSL', value: 'hsl', icon: ColourIcon },
