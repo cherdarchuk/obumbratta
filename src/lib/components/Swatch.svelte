@@ -155,7 +155,7 @@
     top: -6px;
     right: -6px;
     cursor: pointer;
-    background: white;
+    background: var(--app-50);
     border-radius: 50%;
     width: 16px;
     height: 16px;
