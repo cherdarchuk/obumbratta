@@ -163,6 +163,26 @@
     draggingIndex = null;
   }
 
+  function addColourToInput(hex, index) {
+    const N = parsedColours.length;
+    const M = transformedColours.length;
+    
+    let insertAt = N; // Default to append
+    
+    if (N > 1 && M > 1 && typeof index === 'number') {
+      const segmentIndex = Math.floor(index * (N - 1) / (M - 1));
+      insertAt = segmentIndex + 1;
+    }
+
+    const newColours = [
+      ...parsedColours.slice(0, insertAt),
+      hex,
+      ...parsedColours.slice(insertAt)
+    ];
+    
+    inputValue = newColours.join(', ');
+  }
+
 
   function getSVG() {
     if (!svgRef) return;
@@ -335,6 +355,7 @@
           x={i*Math.min(15000, 1006/numColours)} 
           width={Math.min(15000,1006/numColours-6)} 
           oncopy={(text, e, type) => copyToClipboard(text, e, type)}
+          oninsert={(hex) => addColourToInput(hex, i)}
         />
       {/each}
     </svg>
