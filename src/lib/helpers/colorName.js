@@ -6,7 +6,6 @@ const colorNames = {
   "#f0ffff": "Azure",
   "#f5f5dc": "Beige",
   "#ffe4c4": "Bisque",
-  "#000000": "Black",
   "#ffebcd": "BlanchedAlmond",
   "#0000ff": "Blue",
   "#8a2be2": "BlueViolet",
@@ -136,7 +135,6 @@ const colorNames = {
   "#40e0d0": "Turquoise",
   "#ee82ee": "Violet",
   "#f5deb3": "Wheat",
-  "#ffffff": "White",
   "#f5f5f5": "WhiteSmoke",
   "#ffff00": "Yellow",
   "#9acd32": "YellowGreen"
@@ -177,5 +175,8 @@ export function getClosestColorName(hexColor) {
     }
   }
 
-  return closestColorName;
+  return closestColorName
+          .replace(/([a-z])([A-Z])/g, '$1-$2')
+          .toLowerCase()
+          .replace(/\s+/g, '-');
 }
