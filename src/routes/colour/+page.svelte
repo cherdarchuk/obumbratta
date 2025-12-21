@@ -183,6 +183,12 @@
     inputValue = newColours.join(', ');
   }
 
+  function removeColourFromInput(index) {
+    const newColours = [...parsedColours];
+    newColours.splice(index, 1);
+    inputValue = newColours.join(', ');
+  }
+
 
   function getSVG() {
     if (!svgRef) return;
@@ -282,6 +288,7 @@
               width={68} 
               div={true} 
               onchange={(newHex) => inputValue = updateInputColour(inputValue, i, newHex)} 
+              onremove={() => removeColourFromInput(i)}
             />
           </div>
         {/each}

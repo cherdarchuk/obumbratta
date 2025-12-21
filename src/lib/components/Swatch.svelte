@@ -3,6 +3,7 @@
   import WarnIcon from '~icons/material-symbols/warning-outline-rounded';
   import CopyIcon from '~icons/mdi/content-copy';
   import InputIcon from '~icons/mdi/input';
+  import CloseIcon from '~icons/material-symbols/cancel';
 
 	const { 
     colour = 'grey',
@@ -15,6 +16,7 @@
     warn = false,
     onchange,
     oninsert,
+    onremove,
   } = $props();
 
   let isHovered = $state(false);
@@ -98,7 +100,13 @@
     {/if}
   </g>
 {:else}
-  <div class="swatch" style="background-color: {colour}; color: {getTextColor(colour)}; width: {width}px; position: relative;">
+  <!-- svelte-ignore a11y_no_static_element_interactions -->
+  <div 
+    class="swatch" 
+    style="background-color: {colour}; color: {getTextColor(colour)}; width: {width}px; position: relative;"
+    onmouseenter={() => isHovered = true}
+    onmouseleave={() => isHovered = false}
+  >
     {name}
     {#if onchange}
       <input 
@@ -108,6 +116,17 @@
         onclick={(e) => e.stopPropagation()}
         style="opacity: 0; position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer;" 
       />
+    {/if}
+    {#if onremove && isHovered}
+      <!-- svelte-ignore a11y_click_events_have_key_events -->
+      <div 
+        class="remove-btn" 
+        onclick={(e) => { e.stopPropagation(); onremove(); }}
+        role="button"
+        tabindex="0"
+      >
+        <CloseIcon width="16" height="16" color="var(--app-600)" />
+      </div>
     {/if}
   </div>
 {/if}
@@ -129,5 +148,21 @@
     justify-content: center;
     font-size: 12px;
     padding-top: 2px;
+  }
+
+  .remove-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    cursor: pointer;
+    background: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    z-index: 10;
   }
 </style>
