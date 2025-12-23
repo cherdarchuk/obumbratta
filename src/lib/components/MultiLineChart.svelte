@@ -1,13 +1,13 @@
 <script>
 	import { scaleLinear } from 'd3';
-	import { line, curveMonotoneX, curveStepAfter } from 'd3';
+	import { line, area, curveMonotoneX, curveStepAfter } from 'd3';
 	import { extent, group } from 'd3';
 
 	let {
 		data = [],
-		x,
-		y,
-		series,
+		x = 'x',
+		y = 'y',
+		series = () => 'default',
 		xDomain = undefined,
 		yDomain = undefined,
 		colors = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6'],
@@ -16,6 +16,8 @@
     showXAxis = true,
     showYAxis = true,
     title = '',
+    curve = 'monotoneX',
+    showArea = false,
 	} = $props();
 
 	// Container dimensions state
@@ -26,13 +28,23 @@
 	const getX = (d) => (typeof x === 'function' ? x(d) : d[x]);
 	const getY = (d) => (typeof y === 'function' ? y(d) : d[y]);
 	const getSeries = (d) => (typeof series === 'function' ? series(d) : d[series]);
+  const curveMapping = {
+    monotoneX: curveMonotoneX,
+    stepAfter: curveStepAfter
+  };
 
 	// Create indexed data if required
 	const processedData = $derived.by(() => {
-		if (!indexed) return data;
+		let normalizedData = data;
+		// If data is an array of numbers, convert to array of objects
+		if (Array.isArray(data) && data.length > 0 && typeof data[0] === 'number') {
+			normalizedData = data.map((d, i) => ({ x: i, y: d }));
+		}
+
+		if (!indexed) return normalizedData;
 
 		const indexedResult = [];
-		const grouped = group(data, getSeries);
+		const grouped = group(normalizedData, getSeries);
 
 		for (const [key, values] of grouped) {
 			if (values.length === 0) continue;
@@ -103,8 +115,16 @@
 		line()
 			.x((d) => xScale(getX(d)))
 			.y((d) => yScale(getY(d)))
-			.curve(curveStepAfter)
+			.curve(curveMapping[curve] || curveMonotoneX)
 	);
+
+  const areaGenerator = $derived(
+    area()
+      .x((d) => xScale(getX(d)))
+      .y0((d) => yScale(0))
+      .y1((d) => yScale(getY(d)))
+			.curve(curveMapping[curve] || curveMonotoneX)
+  );
 
 	// 5. Generate Path Data
 	const seriesPaths = $derived.by(() => {
@@ -138,6 +158,16 @@
 <div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
 	{#if width > 0 && height > 0}
 		<svg {width} {height} viewBox="0 0 {width} {height}">
+			{#if showArea}
+				<defs>
+					{#each Array.from(groupedData.entries()) as [key, values], i}
+						<linearGradient id="area-gradient-{i}" x1="0" x2="0" y1="0" y2="1">
+							<stop offset="0%" stop-color={getColorForSeries(key, i)} stop-opacity="1" />
+							<stop offset="100%" stop-color={getColorForSeries(key, i)} stop-opacity="0.1" />
+						</linearGradient>
+					{/each}
+				</defs>
+			{/if}
       {#if title}
         <text 
           x={width / 2} 
@@ -184,6 +214,16 @@
       {/if}
 
 			<g class="series">
+				{#if showArea}
+					{#each Array.from(groupedData.entries()) as [key, values], i}
+						<path
+							d={areaGenerator(values)}
+							fill="url(#area-gradient-{i})"
+							stroke="none"
+							class="area-path"
+						/>
+					{/each}
+				{/if}
 				{#each seriesPaths as series}
 					<path
 						d={series.path}
@@ -216,5 +256,9 @@
 		stroke-width: 3;
 		opacity: 0.8;
 		cursor: pointer;
+	}
+	.area-path {
+		opacity: 0.5;
+		transition: opacity 0.2s;
 	}
 </style>

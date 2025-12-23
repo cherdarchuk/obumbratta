@@ -43,13 +43,14 @@
     border-radius: 10px;
     box-shadow: 0 0 0 1px var(--grey-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
     height: 200px;
+    width: 175px
   }
 
   .icon-set {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    justify-content: start;
+    justify-content: center;
     background-color: var(--viz-6);
     padding: 16px;
     height: 100%;

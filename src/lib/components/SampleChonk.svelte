@@ -13,6 +13,7 @@
     <div class="chonk-text">
       <div class="chonk-title">Dat Boy Chonky</div>
       <div class="chonk-desc">Squish Squirrel squashes the garbage down with his squasher-downer.</div>
+      <div class="chonk-desc"><i>– Richard Scarry<br>   (adapted)</i></div>
     </div>
   </div>
 </div>

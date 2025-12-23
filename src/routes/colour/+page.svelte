@@ -37,6 +37,7 @@
   import SampleIcons from '$lib/components/SampleIcons.svelte';
 	import SampleChonk from '$lib/components/SampleChonk.svelte';
 	import SampleClock from '$lib/components/SampleClock.svelte';
+	import SampleTrend from '$lib/components/SampleTrend.svelte';
 	
   const colourSpaces = [
     { label: 'LAB', value: 'lab', icon: ColourIcon },
@@ -473,6 +474,7 @@
       		padding={{ top: 0, right: 0, bottom: 0, left: 0 }}
           colors={['var(--app-500)']}
           title="perceptual lightness"
+          curve="stepAfter"
         />
       </div>
     {:else if resultsView === 'blindness'}
@@ -496,8 +498,9 @@
 
     {:else if resultsView === 'ui'}
       <div class="viz-examples" style={createSampleColours(transformedColours)}>
-        <SampleIcons />
+        <SampleTrend />
         <SampleChonk />
+        <SampleIcons />
         <SampleClock />
       </div>
 
@@ -788,7 +791,7 @@
 
   .viz-examples {
     display: flex;
-    gap: 20px;
+    gap: 16px;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: end;
