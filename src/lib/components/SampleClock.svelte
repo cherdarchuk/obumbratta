@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { Tween } from 'svelte/motion';
   import { linear } from 'svelte/easing';
+  import Topography from '$lib/assets/topography.svg';
 
   // 1. Use $state for reactive variables
   let time = $state(new Date());
@@ -37,6 +38,9 @@
 </script>
 
 <div class="ui-box">
+  <div class="topography" >
+    <Topography />
+  </div>
   <div class="clock-set">
     <svg viewBox='-50 -50 100 100'>
 
@@ -101,6 +105,9 @@
     border-radius: 10px;
     box-shadow: 0 0 0 1px var(--grey-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
     height: 200px;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--viz-1);
   }
 
   .clock-set {
@@ -109,11 +116,22 @@
     align-items: center;
     justify-content: start;
     gap: 12px;
-    background-color: var(--viz-2);
     padding: 12px;
     height: 100%;
     border-radius: 10px;
+    position: relative;
+    z-index: 1;
   }
+
+  .topography {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+    color: var(--viz-6);
+    z-index: 0;
+  }  
 
   svg {
     width: 140px;
@@ -128,7 +146,7 @@
   .clock-time {
     font-size: 18px;
     font-weight: 900;
-    color: var(--viz-15);
+    color: var(--viz-20);
   } 
 
   .clock-face {

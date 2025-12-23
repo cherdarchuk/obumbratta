@@ -2,6 +2,8 @@
 	import { scaleLinear } from 'd3';
 	import { line, area, curveMonotoneX, curveStepAfter } from 'd3';
 	import { extent, group } from 'd3';
+  import { fly } from 'svelte/transition';
+  import { linear } from 'svelte/easing';
 
 	let {
 		data = [],
@@ -18,6 +20,7 @@
     title = '',
     curve = 'monotoneX',
     showArea = false,
+    slide=true,
 	} = $props();
 
 	// Container dimensions state
@@ -153,6 +156,16 @@
 		if (!indexed) return tick;
 		return `${(tick * 100).toFixed(0)}%`;
 	}
+
+	// Force transition on every data update
+  let tkey = 0;
+	let transitionKey = $derived(updateTransitionKey(data));
+
+
+	function updateTransitionKey (data) {
+    return tkey++;
+  }
+
 </script>
 
 <div class="chart-container" bind:clientWidth={width} bind:clientHeight={height}>
@@ -160,11 +173,33 @@
 		<svg {width} {height} viewBox="0 0 {width} {height}">
 			{#if showArea}
 				<defs>
-					{#each Array.from(groupedData.entries()) as [key, values], i}
-						<linearGradient id="area-gradient-{i}" x1="0" x2="0" y1="0" y2="1">
-							<stop offset="0%" stop-color={getColorForSeries(key, i)} stop-opacity="1" />
-							<stop offset="100%" stop-color={getColorForSeries(key, i)} stop-opacity="0.1" />
+						<linearGradient id="area-gradient" x1="0" x2="0" y1="0" y2="1">
+							<stop offset="0%" stop-color="var(--viz-20)" stop-opacity="1" />
+							<stop offset="5%" stop-color="var(--viz-19)" stop-opacity="1" />
+              <stop offset="10%" stop-color="var(--viz-18)" stop-opacity="1" />
+              <stop offset="15%" stop-color="var(--viz-17)" stop-opacity="1" />
+              <stop offset="20%" stop-color="var(--viz-16)" stop-opacity="1" />
+              <stop offset="25%" stop-color="var(--viz-15)" stop-opacity="1" />
+              <stop offset="30%" stop-color="var(--viz-14)" stop-opacity="1" />
+              <stop offset="35%" stop-color="var(--viz-13)" stop-opacity="1" />
+              <stop offset="40%" stop-color="var(--viz-12)" stop-opacity="1" />
+              <stop offset="45%" stop-color="var(--viz-11)" stop-opacity="1" />
+              <stop offset="50%" stop-color="var(--viz-10)" stop-opacity="1" />
+              <stop offset="55%" stop-color="var(--viz-9)" stop-opacity="1" />
+              <stop offset="60%" stop-color="var(--viz-8)" stop-opacity="1" />
+              <stop offset="65%" stop-color="var(--viz-7)" stop-opacity="1" />
+              <stop offset="70%" stop-color="var(--viz-6)" stop-opacity="1" />
+              <stop offset="75%" stop-color="var(--viz-5)" stop-opacity="1" />
+              <stop offset="80%" stop-color="var(--viz-4)" stop-opacity="1" />
+              <stop offset="85%" stop-color="var(--viz-3)" stop-opacity="1" />
+              <stop offset="90%" stop-color="var(--viz-2)" stop-opacity="1" />
+              <stop offset="95%" stop-color="var(--viz-1)" stop-opacity="1" />
+							<stop offset="100%" stop-color="var(--viz-1)" stop-opacity="1" />
 						</linearGradient>
+					{#each Array.from(groupedData.entries()) as [key, values], i}
+						<clipPath id="area-clip-{i}">
+							<path d={areaGenerator(values)} />
+						</clipPath>
 					{/each}
 				</defs>
 			{/if}
@@ -215,16 +250,20 @@
 
 			<g class="series">
 				{#if showArea}
-					{#each Array.from(groupedData.entries()) as [key, values], i}
-						<path
-							d={areaGenerator(values)}
-							fill="url(#area-gradient-{i})"
-							stroke="none"
-							class="area-path"
+					{#each Array.from(groupedData.entries()) as [key, values], i (key + transitionKey)}
+						<rect
+							x={xScale(0)}
+							y={padding.top}
+							width={width +17}
+							height={height - padding.top - padding.bottom}
+							fill="url(#area-gradient)"
+							clip-path="url(#area-clip-{i})"
+							class="area-rect"
+            in:fly={showArea ? { x: xScale(2), duration: 1000, easing: linear, opacity: 1 } : undefined}
 						/>
 					{/each}
 				{/if}
-				{#each seriesPaths as series}
+				{#each seriesPaths as series (series.id + transitionKey)}
 					<path
 						d={series.path}
 						fill="none"
@@ -233,6 +272,7 @@
 						stroke-linecap="round"
 						stroke-linejoin="round"
 						class="line-path"
+            in:fly={showArea ? { x: xScale(2), duration: 1000, easing: linear, opacity: 1 } : undefined}
 					/>
 				{/each}
 			</g>
@@ -257,8 +297,7 @@
 		opacity: 0.8;
 		cursor: pointer;
 	}
-	.area-path {
-		opacity: 0.5;
+	.area-rect {
 		transition: opacity 0.2s;
 	}
 </style>

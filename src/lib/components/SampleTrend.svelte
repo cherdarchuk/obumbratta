@@ -1,6 +1,7 @@
 <script>
   import { onMount, onDestroy } from 'svelte';
 	import MultiLineChart from './MultiLineChart.svelte';
+  import Topography from '$lib/assets/topography.svg';
 
   let numbers = $state([0.1, 0.15, 0.2, 0.25, 0.3, 0.28, 0.35, 0.4, 0.38, 0.45, 0.5, 0.55, 0.6, 0.58, 0.65, 0.7, 0.75, 0.8, 0.78, 0.85]);
 
@@ -28,6 +29,9 @@
 </script>
 
 <div class="ui-box">
+    <div class="topography" >
+      <Topography />
+    </div>
   <div class="trend-set">
     <div class="chart-title">Are we trendin'?</div>
     <div class="chart-subtitle">All your base are belong to us</div>
@@ -35,6 +39,7 @@
       <MultiLineChart
         data={numbers}
         yDomain={[0, 1]}
+        xDomain={[1, numbers.length -2]}
         padding={{ top: 0, right: 0, bottom: 0, left: 0 }}
         colors={['var(--viz-12)']}
         showXAxis={false}
@@ -51,7 +56,9 @@
     border-radius: 10px;
     box-shadow: 0 0 0 1px var(--grey-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
     height: 200px;
-  }
+    overflow: hidden;
+    position: relative;
+   }
 
   .trend-set {
     display: block;
@@ -59,12 +66,23 @@
     justify-content: start;
     gap: 12px;
     justify-content: start;
-    background-color: white;
     padding: 16px;
     height: 100%;
     border-radius: 10px;
-    width: 330px;
+    width: 330px; 
+    position: relative;
+    z-index: 1;
   }
+
+  .topography {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+    color: var(--viz-4);
+    z-index: 0;
+  }  
   .chart-title {
     font-size: 24px;
     line-height: 90%;
@@ -72,11 +90,13 @@
     letter-spacing: -7%;
     color: var(--viz-17);
     text-transform: uppercase;
+    position: relative;
   }
 
   .chart-subtitle {
     font-size: 12px;
-    color: var(--viz-10);
+    color: var(--viz-12);
+    position: relative;
   }
 
 

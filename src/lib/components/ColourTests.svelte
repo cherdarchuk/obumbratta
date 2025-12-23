@@ -11,9 +11,9 @@
 
   let colourBlindnessTypes = $derived(
     [
-      { label: 'deutan', value: 'deuteranopia', detail: '~6.5% of males, ~0.41% of females' },
-      { label: 'protan', value: 'protanopia', detail: '~2% of males, ~0.02% of females' },
-      { label: 'tritan', value: 'tritanopia', detail: '<0.01% of males and females' },
+      { label: 'deutan', value: 'deuteranopia', detail: 'green blind ~6.5% of males, ~0.41% of females' },
+      { label: 'protan', value: 'protanopia', detail: 'red blind ~2% of males, ~0.02% of females' },
+      { label: 'tritan', value: 'tritanopia', detail: 'blue blind <0.01% of males and females' },
     ]
   );
 
