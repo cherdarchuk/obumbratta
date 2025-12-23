@@ -1,3 +1,29 @@
+/**
+ * Spread an array of colors across 20 CSS variables (--viz-1 to --viz-20).
+ * If colors.length < 20, each color is assigned to a block of variables.
+ * If colors.length > 20, only the first 20 are used.
+ * Returns a string of CSS variable definitions.
+ */
+export function createSampleColours(colours) {
+  const totalVars = 20;
+  const result = [];
+  const n = colours.length;
+  if (n === 0) return '';
+  // If more than 20, just use the first 20
+  const usedColours = n > totalVars ? colours.slice(0, totalVars) : colours;
+  const blockSize = Math.floor(totalVars / usedColours.length);
+  let remainder = totalVars % usedColours.length;
+  let varIndex = 1;
+  for (let i = 0; i < usedColours.length; i++) {
+    let count = blockSize + (remainder > 0 ? 1 : 0);
+    remainder--;
+    for (let j = 0; j < count; j++) {
+      result.push(`--viz-${varIndex}: ${usedColours[i]};`);
+      varIndex++;
+    }
+  }
+  return result.join('\n');
+}
 import chroma from 'chroma-js';
 import { getTailwindColors } from "uicolors-generator";
 

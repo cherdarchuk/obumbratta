@@ -9,7 +9,8 @@
     colourParse, 
     nameParse, 
     getDefaultNameVals, 
-    tailwindifyInput 
+    tailwindifyInput,
+    createSampleColours,
   } from '$lib/helpers/paletteLogic.js';
   import { reorderInputColours, updateInputColour } from '$lib/helpers/inputLogic.js';
   import { getCSS, convertCssVariables } from '$lib/helpers/exporters.js';
@@ -20,7 +21,6 @@
   import FigmaIcon from '~icons/ph/figma-logo';
   import ArrayIcon from '~icons/material-symbols/data-array-rounded';
   import WarnIcon from '~icons/material-symbols/warning-outline';
-  import CheckIcon from '~icons/material-symbols/check-rounded';
   import ColourIcon from '~icons/tabler/color-filter';
   import { isColorBlindSafe } from '$lib/helpers/colorBlind.js';
 
@@ -30,6 +30,13 @@
   import ButtonGroup from '$lib/components/ButtonGroup.svelte';
   import Toggle from '$lib/components/Toggle.svelte';
 	import ColourTests from '$lib/components/ColourTests.svelte';
+	import SampleMap from '$lib/components/SampleMap.svelte';
+	import SampleChord from '$lib/components/SampleChord.svelte';
+  import SampleArea from '$lib/components/SampleArea.svelte';
+	import SampleBar from '$lib/components/SampleBar.svelte';
+  import SampleIcons from '$lib/components/SampleIcons.svelte';
+	import SampleChonk from '$lib/components/SampleChonk.svelte';
+	import SampleClock from '$lib/components/SampleClock.svelte';
 	
   const colourSpaces = [
     { label: 'LAB', value: 'lab', icon: ColourIcon },
@@ -131,6 +138,8 @@
 
   let resultsViews = $derived([
     { label: 'perceptual lightness', value: 'lightness' },
+    { label: 'sample visuals', value: 'viz' },
+    { label: 'sample ui', value: 'ui' },
     { label: 'colour blindness', value: 'blindness', icon: colourBlindWarn ? WarnIcon : null },
   ]);
 
@@ -477,6 +486,21 @@
         }}
       />
 
+    {:else if resultsView === 'viz'}
+      <div class="viz-examples" style={createSampleColours(transformedColours)}>
+        <SampleMap />
+        <SampleArea />
+        <SampleChord />
+        <SampleBar />
+      </div>
+
+    {:else if resultsView === 'ui'}
+      <div class="viz-examples" style={createSampleColours(transformedColours)}>
+        <SampleIcons />
+        <SampleChonk />
+        <SampleClock />
+      </div>
+
     {/if}
 
 
@@ -760,6 +784,14 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
     border: 1px solid var(--app-100);
     max-width: 200px;
+  }
+
+  .viz-examples {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
   }
 
 
