@@ -29,9 +29,9 @@
 </script>
 
 <div class="ui-box">
-    <div class="topography" >
+    <!-- <div class="topography" >
       <Topography />
-    </div>
+    </div> -->
   <div class="trend-set">
     <div class="chart-title">Are we trendin'?</div>
     <div class="chart-subtitle">All your base are belong to us</div>
@@ -54,6 +54,7 @@
   .ui-box {
     /* border: 1px solid var(--grey-50); */
     border-radius: 10px;
+    background: linear-gradient(to bottom right, var(--viz-1), var(--viz-2), var(--viz-3), var(--viz-4), var(--viz-5), var(--viz-6));
     box-shadow: 0 0 0 1px var(--app-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
     height: 200px;
     overflow: hidden;

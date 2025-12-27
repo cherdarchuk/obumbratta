@@ -159,12 +159,12 @@
   }
 
   .minor {
-    stroke: var(--viz-4);
+    stroke: var(--viz-7);
     stroke-width: 0.5;
   }
 
   .major {
-    stroke: var(--viz-6);
+    stroke: var(--viz-9);
     stroke-width: 1;
   }
 

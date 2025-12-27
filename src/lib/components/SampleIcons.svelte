@@ -33,7 +33,7 @@
         <div class="icon-num">345,678</div>
       </div>
     </div>
-    <div class="small-print">*objects are closer than they appear</div>
+    <div class="small-print">*objects may be closer than they appear</div>
   </div>
 </div>
 
