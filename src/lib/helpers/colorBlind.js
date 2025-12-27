@@ -1,11 +1,16 @@
 import chroma from 'chroma-js';
 
+    // Color Blindness Simulation function adapted from Matthew Wickline's function
+    // The original copyright is included below.
+    // The Color Blindness Simulation function is
+    // copyright (c) 2000-2001 by Matthew Wickline and the
+    // Human-Computer Interaction Resource Network ( http://hcirn.com/ ).
 
-/**
- * The Color Blindness Simulation function is
- * copyright (c) 2000-2001 by Matthew Wickline and the
- * Human-Computer Interaction Resource Network ( http://hcirn.com/ ).
- */
+    // It is freely available for non-commercial use. For commercial use, please
+    // contact the Human-Computer Interaction Resource Network ( http://hcirn.com/ ).
+
+    // Colour blind safety thresholds and logic adapted from Gregor Aisch's
+    // Color Palette Helper (https://gka.github.io/palettes/)
 
 const GAMMA = 2.2;
 

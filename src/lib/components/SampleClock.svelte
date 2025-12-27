@@ -103,7 +103,7 @@
 <style>
   .ui-box {
     border-radius: 10px;
-    box-shadow: 0 0 0 1px var(--grey-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
+    box-shadow: 0 0 0 1px var(--app-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
     height: 200px;
     overflow: hidden;
     position: relative;

@@ -74,6 +74,7 @@ let {
   :global(.button-group) {
     display: flex;
     gap: 0px;
+    flex-wrap: wrap; 
   }
 
   :global(.grouped-btn) {
@@ -129,4 +130,6 @@ let {
   :global(.button-label.stack) {
     display: block;
   }
+
+
 </style>

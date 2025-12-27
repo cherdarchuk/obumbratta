@@ -20,7 +20,7 @@
   import SvgIcon from '$lib/assets/svg.svg';
   import FigmaIcon from '~icons/ph/figma-logo';
   import ArrayIcon from '~icons/material-symbols/data-array-rounded';
-  import WarnIcon from '~icons/material-symbols/warning-outline';
+  import WarnIcon from '~icons/mingcute/alert-line';
   import ColourIcon from '~icons/tabler/color-filter';
   import { isColorBlindSafe } from '$lib/helpers/colorBlind.js';
 
@@ -38,6 +38,7 @@
 	import SampleChonk from '$lib/components/SampleChonk.svelte';
 	import SampleClock from '$lib/components/SampleClock.svelte';
 	import SampleTrend from '$lib/components/SampleTrend.svelte';
+	import ContrastRatios from '$lib/components/ContrastRatios.svelte';
 	
   const colourSpaces = [
     { label: 'LAB', value: 'lab', icon: ColourIcon },
@@ -139,9 +140,11 @@
 
   let resultsViews = $derived([
     { label: 'perceptual lightness', value: 'lightness' },
+    { label: 'colour blindness', value: 'blindness', icon: colourBlindWarn ? WarnIcon : null },
+    { label: 'contrast ratios', value: 'contrast' },
     { label: 'sample visuals', value: 'viz' },
     { label: 'sample ui', value: 'ui' },
-    { label: 'colour blindness', value: 'blindness', icon: colourBlindWarn ? WarnIcon : null },
+    { label: 'credits', value: 'credits' },
   ]);
 
   
@@ -321,7 +324,7 @@
         <button 
           onclick={(e) => copyToClipboard(inputFigmaValue, e, "Figma import")} 
           class="desktop-only"
-          onmouseenter={(e) => showTooltip(e, "copy input for Figma")}
+          onmouseenter={(e) => showTooltip(e, "copy input for Figma<br>bulk style creator plugin")}
           onmouseleave={hideTooltip}
         ><FigmaIcon height={20} width={20} /></button>
         <!-- <label for="background-color">Background:</label>
@@ -442,7 +445,7 @@
           ><SvgIcon height={20} width={20} /></button>
           <button 
             onclick={(e) => copyToClipboard(outputFigmaValue, e, "Figma import")}
-            onmouseenter={(e) => showTooltip(e, "copy for Figma")}
+            onmouseenter={(e) => showTooltip(e, "copy for Figma<br>bulk style creator plugin")}
             onmouseleave={hideTooltip}
           ><FigmaIcon height={20} width={20} /></button>
         </div>
@@ -489,7 +492,7 @@
       />
 
     {:else if resultsView === 'viz'}
-      <div class="viz-examples" style={createSampleColours(transformedColours)}>
+      <div class="viz-examples" style={createSampleColours(transformedColours, blackBackground)}>
         <SampleMap />
         <SampleArea />
         <SampleChord />
@@ -497,13 +500,25 @@
       </div>
 
     {:else if resultsView === 'ui'}
-      <div class="viz-examples" style={createSampleColours(transformedColours)}>
+      <div class="viz-examples" style={createSampleColours(transformedColours, blackBackground)}>
         <SampleTrend />
         <SampleChonk />
         <SampleIcons />
         <SampleClock />
       </div>
 
+    {:else if resultsView === 'contrast'}
+      <ContrastRatios colours={transformedColours} />
+
+    {:else if resultsView === 'credits'}
+      <div class="credits">
+        <p>Gregor Aisch's <a href="https://gka.github.io/palettes" target="_blank" >Color Palette Helper</a> inspired this tool and his <a href="https://gka.github.io/chroma.js/" target="_blank" rel="noopener noreferrer">Chroma.js</a> powers it.</p>
+        <p>Single colour palette generation with Brian Wendt's <a href="https://github.com/wendtcode/uicolors-generator" target="_blank" rel="noopener noreferrer">UI Colors Generator</a></p>
+        <p>Colour blindness simulation adapted from the function by Matthew Wickline and the <a href="http://hcirn.com/" target="_blank" rel="noopener noreferrer">HCIRN</a>.</p>
+        <p>Some sample visuals created with <a href="https://rawgraphs.io/" target="_blank" rel="noopener noreferrer">RawGraphs</a></p>
+        <p>Squirrel photo by <a href="https://unsplash.com/@sparrow24?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Włodzimierz Jaworski</a> on <a href="https://unsplash.com/photos/brown-squirrel-on-brown-dried-leaves-during-daytime-NPm7lIxltP8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank">Unsplash</a></p>
+        <p>Animated clock based on this <a href="https://svelte.dev/playground/270e83f43e7a48918d8f2d497760904f?version=3.32.1" target="_blank" rel="noopener noreferrer">Svelte Playground</a></p>
+      </div>
     {/if}
 
 
@@ -533,7 +548,7 @@
   <div class="hover-tooltip-wrapper" transition:fade={{ duration: 100 }}>
     <Tooltip mouseEvent={hoverTooltipEvent} centered={true} yOffset={-6}>
       <div class="hover-tip-text">
-        {hoverTooltipText}
+        {@html hoverTooltipText}
       </div>
     </Tooltip>
   </div>
@@ -550,6 +565,17 @@
   /* When this page toggles black background, override layout using a body class */
   :global(body.page-black-bg) {
     background-color: #000 !important;
+  }
+
+  .credits {
+    min-height: 200px;
+    box-shadow: 0 0 0 1px var(--app-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
+    padding: 16px;
+  }
+  .credits p {
+    font-size: 0.875rem;
+    color: var(--grey-700);
+    margin-bottom: 8px;
   }
 
 

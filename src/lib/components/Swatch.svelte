@@ -1,6 +1,6 @@
 <script>
   import chroma from "chroma-js";
-  import WarnIcon from '~icons/material-symbols/warning-outline-rounded';
+  import WarnIcon from '~icons/mingcute/alert-line';
   import CopyIcon from '~icons/mdi/content-copy';
   import InputIcon from '~icons/mdi/input';
   import CloseIcon from '~icons/material-symbols/cancel';

@@ -4,13 +4,17 @@
  * If colors.length > 20, only the first 20 are used.
  * Returns a string of CSS variable definitions.
  */
-export function createSampleColours(colours) {
+export function createSampleColours(colours, blackBackground = false) {
   const totalVars = 20;
   const result = [];
-  const n = colours.length;
+  let usedColours = [...colours];
+  if (blackBackground) {
+    usedColours.reverse();
+  }
+  const n = usedColours.length;
   if (n === 0) return '';
   // If more than 20, just use the first 20
-  const usedColours = n > totalVars ? colours.slice(0, totalVars) : colours;
+  usedColours = n > totalVars ? usedColours.slice(0, totalVars) : usedColours;
   const blockSize = Math.floor(totalVars / usedColours.length);
   let remainder = totalVars % usedColours.length;
   let varIndex = 1;
