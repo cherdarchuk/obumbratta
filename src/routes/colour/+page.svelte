@@ -39,6 +39,7 @@
 	import SampleClock from '$lib/components/SampleClock.svelte';
 	import SampleTrend from '$lib/components/SampleTrend.svelte';
 	import ContrastRatios from '$lib/components/ContrastRatios.svelte';
+	import ColourPlot from '$lib/components/ColourPlot.svelte';
 	
   const colourSpaces = [
     { label: 'LAB', value: 'lab', icon: ColourIcon },
@@ -144,6 +145,7 @@
     { label: 'contrast ratios', value: 'contrast' },
     { label: 'sample visuals', value: 'viz' },
     { label: 'sample ui', value: 'ui' },
+    { label: 'colour plot', value: 'plot' },
     { label: 'credits', value: 'credits' },
   ]);
 
@@ -509,6 +511,9 @@
 
     {:else if resultsView === 'contrast'}
       <ContrastRatios colours={transformedColours} />
+
+    {:else if resultsView === 'plot'}
+      <ColourPlot colours={transformedColours} colorSpace={colorSpace} />
 
     {:else if resultsView === 'credits'}
       <div class="credits">
