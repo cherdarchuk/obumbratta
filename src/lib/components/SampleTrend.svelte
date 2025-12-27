@@ -75,7 +75,7 @@
     z-index: 1;
   }
 
-  .topography {
+  /* .topography {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -83,7 +83,7 @@
     user-select: none;
     color: var(--viz-4);
     z-index: 0;
-  }  
+  }   */
   .chart-title {
     font-size: 24px;
     line-height: 90%;
