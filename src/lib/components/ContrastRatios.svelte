@@ -8,7 +8,7 @@
     colours = [],
   } = $props()
 
-  let backgrounds = $derived(['white', colours[0], colours[colours.length -1], 'black']);
+  let backgrounds = $derived(['#ffffff', colours[0], colours[colours.length -1], '#000000']);
 
 </script>
 

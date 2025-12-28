@@ -5,8 +5,8 @@
   import AlertIcon from '~icons/mingcute/alert-fill';
   
 	const { 
-    backColour = 'black',
-    foreColour = 'white',
+    backColour = '#ffffff',
+    foreColour = '#000000',
     x = 0,
     width = 84,
   } = $props();
