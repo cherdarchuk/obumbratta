@@ -27,7 +27,7 @@
   {/each} 
   <div class="legend">
     <div><CheckIcon/> <b>above 4.5</b> - good</div>
-    <div><AsteriskIcon/> <b>above 3</b> - good for titles and icons but not body text</div>
+    <div><AsteriskIcon/> <b>above 3</b> - good for headlines and icons but not body text</div>
     <div><AlertIcon/> <b>below 3</b> - fails accesibility standards</div>
   </div> 
 </div>

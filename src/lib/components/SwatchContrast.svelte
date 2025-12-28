@@ -26,6 +26,7 @@
 
 </script>
 
+<a href="https://color.review/check/{foreColour.slice(1)}-{backColour.slice(1)}" target="_blank" rel="noopener noreferrer">
 <g class="swatch-contrast">
   {#if contrastVal >= 3}
     <rect x={x} {width} height={36} fill={backColour} rx="8" stroke-width="0.5" stroke="#777777"/>  
@@ -43,6 +44,7 @@
   {/if}
   
 </g>
+</a>
 
 
 <style>
