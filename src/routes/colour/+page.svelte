@@ -16,6 +16,9 @@
   import { getCSS, convertCssVariables } from '$lib/helpers/exporters.js';
   import { isColorBlindSafe } from '$lib/helpers/colorBlind.js';
   import { HistoryState } from '$lib/helpers/history.svelte.js';
+  import { onMount } from 'svelte';
+  import { page } from '$app/state';
+  import { generateUrl } from '$lib/helpers/deepLink.svelte.js';
 
 
   import CssIcon from '$lib/assets/css.svg';
@@ -24,6 +27,7 @@
   import ArrayIcon from '~icons/material-symbols/data-array-rounded';
   import WarnIcon from '~icons/mingcute/alert-line';
   import ColourIcon from '~icons/tabler/color-filter';
+  import LinkIcon from '~icons/mdi/link-variant';
 
   import Swatch from '$lib/components/Swatch.svelte';
   import MultiLineChart from '$lib/components/MultiLineChart.svelte';
@@ -59,11 +63,6 @@
   let inputValue = $state("lightyellow, f8f, '#02439e'");
   let inputName = $state('');
 
-  const history = new HistoryState(
-		() => inputValue,          // getter
-		(v) => inputValue = v      // setter
-	);
-
   let numColours = $state(11);
   let colorSpace = $state('lch');
   let correctLightness = $state(false);
@@ -80,6 +79,30 @@
   
   let hoverTooltipEvent = $state(null);
   let hoverTooltipText = $state('');
+
+
+  // Handle URL parameters on initial load
+  onMount(() => {
+    const params = page.url.searchParams;
+    // Loop through all URL parameters and update appState if the property exists
+    for (const [key, value] of params.entries()) {
+      if (key === 'inputValue') inputValue = value;
+      if (key === 'numColours') numColours = parseInt(value) || 11;
+      if (key === 'colorSpace') colorSpace = value;
+      if (key === 'correctLightness') correctLightness = value === 'true';
+      if (key === 'blackBackground') blackBackground = value === 'true';
+      if (key === 'keepOriginal') keepOriginal = value === 'true';
+      if (key === 'stepwise') stepwise = value === 'true';
+      if (key === 'inputName') inputName = value;
+    }
+  });
+
+
+
+  const history = new HistoryState(
+		() => inputValue,          // getter
+		(v) => inputValue = v      // setter
+	);
 
   function showTooltip(e, text) {
     hoverTooltipEvent = e;
@@ -484,6 +507,20 @@
             onmouseenter={(e) => showTooltip(e, "copy for Figma<br>bulk style creator plugin")}
             onmouseleave={hideTooltip}
           ><FigmaIcon height={20} width={20} /></button>
+          <button 
+            onclick={(e) => copyToClipboard(generateUrl({
+              inputValue,
+              numColours,
+              colorSpace,
+              correctLightness,
+              blackBackground,
+              keepOriginal,
+              stepwise,
+              inputName
+            }), e, "current settings link")} 
+            onmouseenter={(e) => showTooltip(e, "copy link to current settings")}
+            onmouseleave={hideTooltip}
+          ><LinkIcon /></button>
         </div>
       </div>
     </div>
@@ -862,6 +899,13 @@
     justify-content: space-between;
     align-items: end;
   }
+
+  @media (max-width: 900px) {
+  .viz-examples {
+    justify-content: start; 
+    gap: 16px; /* Cap the gap */
+  }
+}
 
 
 </style>

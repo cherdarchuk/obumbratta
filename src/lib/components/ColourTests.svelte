@@ -20,31 +20,37 @@
 
 </script>
 
-{#each colourBlindnessTypes as { label, value, detail }}
-  {@const simulatedColours = getSimulatedColors(colours, value)}
-  {@const problems = isColorBlindSafe(colours, value)}
-  <h3><b>{label}</b> {detail}</h3>
-  <svg viewBox="0 0 1000 36" xmlns="http://www.w3.org/2000/svg">
-    {#each simulatedColours as colour, i}
-      <Swatch 
-        {colour} 
-        x={i*Math.min(15000, 1006/colours.length)} 
-        width={Math.min(15000,1006/colours.length - 6)} 
-        short={true}
-        warn = {problems.includes(colour)}
-        onwarnhover={(e) => {
-          if (e) onhover?.(e, "Colours are significantly more similar than their counterparts");
-          else onhover?.(null);
-        }}
-      />
-    {/each}
-  </svg>
-{/each}
-    <a href="https://www.ncbi.nlm.nih.gov/books/NBK11538/table/ch28kallcolor.T1/" target="_blank" rel="noopener noreferrer">
-      source
-    </a>
+<div class="container">
+
+  {#each colourBlindnessTypes as { label, value, detail }}
+    {@const simulatedColours = getSimulatedColors(colours, value)}
+    {@const problems = isColorBlindSafe(colours, value)}
+    <h3><b>{label}</b> {detail}</h3>
+    <svg viewBox="0 0 1000 36" xmlns="http://www.w3.org/2000/svg">
+      {#each simulatedColours as colour, i}
+        <Swatch 
+          {colour} 
+          x={i*Math.min(15000, 1006/colours.length)} 
+          width={Math.min(15000,1006/colours.length - 6)} 
+          short={true}
+          warn = {problems.includes(colour)}
+          onwarnhover={(e) => {
+            if (e) onhover?.(e, "Colours are significantly more similar than their counterparts");
+            else onhover?.(null);
+          }}
+        />
+      {/each}
+    </svg>
+  {/each}
+  <a href="https://www.ncbi.nlm.nih.gov/books/NBK11538/table/ch28kallcolor.T1/" target="_blank" rel="noopener noreferrer">
+    source
+  </a>
+</div>
 
 <style>
+  .container {
+    height: 200px;
+  }
   h3 {
     text-align: center;
     font-size: 12px;
