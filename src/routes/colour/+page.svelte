@@ -680,15 +680,6 @@
     align-items: center;
     flex-wrap: wrap;
   }
-  .swatch-row input {
-		width: 68px;
-		height: 32px;
-		border: 0;
-		padding: 0;
-		background: transparent;
-		position: absolute;
-		opacity: 0.5;
-	}
 
   .box {
     display: flex;
@@ -824,12 +815,6 @@
 
 
 
-
-  h3 {
-    text-align: center;
-    font-size: 1rem;
-    color: var(--grey-600);
-  }
 
 
   .small-label {
