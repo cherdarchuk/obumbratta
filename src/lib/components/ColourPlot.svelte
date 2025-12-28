@@ -70,7 +70,11 @@
       const hex = chroma.rgb(r, g, b).hex();
       
       navigator.clipboard.writeText(hex).then(() => {
-        tooltipEvent = event;
+        // Position tooltip just above the mouse
+        tooltipEvent = {
+          clientX: event.clientX,
+          clientY: event.clientY - 10 // 32px above mouse
+        };
         tooltipMessage = `${hex} copied to clipboard`;
         tooltipOn = true;
         setTimeout(() => { tooltipOn = false; }, 1400);
@@ -206,7 +210,7 @@
 <!-- svelte-ignore a11y_click_events_have_key_events -->
 <!-- svelte-ignore a11y_no_static_element_interactions -->
 <div class="colour-plot" bind:clientWidth={plotWidth} style="width: 100%;" onclick={handleClick}>
-  <canvas bind:this={canvas} width="200" height="40" style="border: 1px solid var(--grey-50); width: {plotWidth}px; height: {plotWidth / 5}px;"></canvas>
+  <canvas bind:this={canvas} width="200" height="40" style="width: {plotWidth}px; height: {plotWidth / 5}px;"></canvas>
   <svg width={plotWidth} height={plotWidth / 5} style="position: absolute; top: 0; left: 0; pointer-events: none;">
     {#each plotPoints as point}
       <circle cx={point.x} cy={point.y} r="6" fill={point.colour} stroke="black" stroke-width="4" />
@@ -235,6 +239,7 @@
   .colour-plot {
     padding: 0px;
     position: relative;
+    height: 200px;
   }
 
   svg {
@@ -254,7 +259,7 @@
 
   .tip-text {
     border-radius: 6px;
-    background-color: white;
+    background-color: var(--app-100);
     color: var(--grey-800);
     padding: 6px 10px;
     font-size: 12px;

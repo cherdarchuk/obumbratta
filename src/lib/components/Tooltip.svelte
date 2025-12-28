@@ -13,7 +13,7 @@
   let height = $state(0);
   let width = $state(0);
 
-  let rect = $derived(mouseEvent.target.getBoundingClientRect());
+  let rect = $derived(mouseEvent && mouseEvent.target ? mouseEvent.target.getBoundingClientRect() : { left: mouseEvent?.clientX ?? 0, top: mouseEvent?.clientY ?? 0, width: 0, height: 0, right: mouseEvent?.clientX ?? 0, bottom: mouseEvent?.clientY ?? 0 });
 
   let left = $derived.by(() => {
     let tooltipLeft;
