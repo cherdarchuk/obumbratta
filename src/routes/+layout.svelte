@@ -1,6 +1,8 @@
 <script>
 	import '$lib/styles/normalize.css';
 	import '$lib/styles/app.css';
+
+  let {children} = $props();
 </script>
 
 
@@ -8,10 +10,12 @@
   <div class="header">
     <!-- <div><a href="#home">Home</a></div> -->
     <div></div>
-    <svg width="57" height="36" viewBox="0 0 57 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M39 1H25L13.48 35.2H27.48L39 1Z" fill="#BDB897"/>
-      <path d="M57 1H43L31.48 35.2H45.48L57 1Z" fill="#BDB897"/>
-    </svg>
+    <a href="/" style="cursor: pointer;" aria-label="Home">
+      <svg width="57" height="36" viewBox="0 0 57 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M39 1H25L13.48 35.2H27.48L39 1Z" fill="#BDB897"/>
+        <path d="M57 1H43L31.48 35.2H45.48L57 1Z" fill="#BDB897"/>
+      </svg>
+    </a>
     <nav class="menu">
       <!-- <a href="#projects">Projects</a>
       <a href="#about">About</a> -->
@@ -20,7 +24,7 @@
 </div>
 
 
-<slot></slot>
+{@render children()}
 
 
 <div class="full-width-foot">
