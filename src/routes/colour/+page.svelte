@@ -576,6 +576,7 @@
     min-height: 200px;
     box-shadow: 0 0 0 1px var(--app-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
     padding: 16px;
+    border-radius: 8px;
   }
   .credits p {
     font-size: 0.875rem;
