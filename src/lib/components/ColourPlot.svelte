@@ -90,11 +90,7 @@
     let startHue = getHue(colours[0], colorSpace);
     const nextHue = getHue(colours[1], colorSpace);
     
-    if (colorSpace === 'rgb') {
-      startHue = 0;
-    } else {
-      startHue = (startHue - 10 + 360) % 360;
-    } // Fix for RGB hue wrapping issue
+
     
     // Calculate distances to determine direction
     const shiftedNext = (nextHue - startHue + 360) % 360;
@@ -103,6 +99,17 @@
     
     // Determines if we should plot backwards
     const reverse = x_reverse < x_forward;
+    
+    // Adjust startHue based on reverse mode
+    if (reverse) {
+      startHue = (startHue + 10) % 360;
+    }
+    else {
+      startHue = (startHue + 350) % 360;
+    }
+    if (colorSpace === 'rgb') {
+      startHue = 359.5;
+    } 
     
     const sortedColours = [...colours].sort((a, b) => {
       const aHue = (getHue(a, colorSpace) - startHue + 360) % 360;
@@ -172,6 +179,7 @@
         data[pixelIndex + 1] = rgb[1];
         data[pixelIndex + 2] = rgb[2];
         data[pixelIndex + 3] = 255;
+
       }
     }
     ctx.putImageData(imageData, 0, 0);
@@ -203,6 +211,9 @@
     {#each plotPoints as point}
       <circle cx={point.x} cy={point.y} r="6" fill={point.colour} stroke="black" stroke-width="4" />
       <circle cx={point.x} cy={point.y} r="6" fill="none" stroke="white" stroke-width="2" />
+      <!-- <text x={point.x} y={point.y + 20} text-anchor="middle" font-size="10" fill="black">
+        {getHue(point.colour, colorSpace).toFixed(0)}°
+      </text> -->
     {/each}
   </svg>
   {#if colours.length === 0}

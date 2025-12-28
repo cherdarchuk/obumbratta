@@ -529,7 +529,7 @@
 
 
     <div style="display: flex; align-items: center; justify-content: center;">
-      <ButtonGroup bind:selected={resultsView} options={resultsViews} stack={false} --max-width="150px" --min-width="140px" --icon-size="14px" />
+      <ButtonGroup bind:selected={resultsView} options={resultsViews} stack={false} --max-width="150px" --min-width="120px" --icon-size="14px" />
     </div>
       
 
