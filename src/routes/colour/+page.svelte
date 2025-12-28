@@ -141,11 +141,11 @@
 
   let resultsViews = $derived([
     { label: 'perceptual lightness', value: 'lightness' },
+    { label: 'colour plot', value: 'plot' },
     { label: 'colour blindness', value: 'blindness', icon: colourBlindWarn ? WarnIcon : null },
     { label: 'contrast ratios', value: 'contrast' },
     { label: 'sample visuals', value: 'viz' },
     { label: 'sample ui', value: 'ui' },
-    { label: 'colour plot', value: 'plot' },
     { label: 'credits', value: 'credits' },
   ]);
 
