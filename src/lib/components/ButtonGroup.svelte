@@ -1,7 +1,7 @@
 <script>
   import { Label, RadioGroup } from "bits-ui";
 
-let { 
+  let { 
     selected = $bindable(''), 
     options = [],
     label = '',
@@ -10,9 +10,7 @@ let {
   } = $props();
 
   let btnGrpId = $derived(label ? label.replace(/\s+/g, '-').toLowerCase() : `btn-grp-${Math.random().toString(36).substr(2, 9)}`); 
-  
 </script>
-
 
 <div class="container" class:label-above={labelAbove}>
   {#if label}
@@ -29,7 +27,7 @@ let {
       <RadioGroup.Item 
         id={btnGrpId + option.value} 
         value={option.value} 
-        class="grouped-btn  {selected === option.value ? 'active' : ''}"
+        class="grouped-btn {selected === option.value ? 'active' : ''}"
       >
         <Label.Root 
           for={btnGrpId + option.value} 
@@ -38,7 +36,11 @@ let {
           {#if option.icon}
             <span style:font-size="var(--icon-size, 7px)">{@render option.icon({ class: "button-icon" })}</span>
           {/if}
-          {option.label}
+          
+          <span class="btn-text-wrapper" data-text={option.label}>
+            {option.label}
+          </span>
+          
         </Label.Root>
       </RadioGroup.Item>
     {/each}
@@ -46,6 +48,10 @@ let {
 </div>
 
 <style>
+
+
+
+
   .container {
     display: flex;
     align-items: center;
@@ -63,13 +69,11 @@ let {
     color: var(--app-500);
     max-width: 100%;
     text-align: right;
-    /* white-space: nowrap; */
   }
 
   .container.label-above :global(.btn-grp-label) {
     text-align: left;
   }
-
 
   :global(.button-group) {
     display: flex;
@@ -131,5 +135,23 @@ let {
     display: block;
   }
 
+  .btn-text-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 
+ 
+  .btn-text-wrapper::after {
+    content: attr(data-text);
+    font-weight: 700; 
+    height: 0;
+    visibility: hidden;
+    overflow: hidden;
+    user-select: none;
+    pointer-events: none;
+    speak: none; 
+  }
 </style>
