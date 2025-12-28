@@ -14,6 +14,8 @@
   } from '$lib/helpers/paletteLogic.js';
   import { reorderInputColours, updateInputColour } from '$lib/helpers/inputLogic.js';
   import { getCSS, convertCssVariables } from '$lib/helpers/exporters.js';
+  import { isColorBlindSafe } from '$lib/helpers/colorBlind.js';
+  import { HistoryState } from '$lib/helpers/history.svelte.js';
 
 
   import CssIcon from '$lib/assets/css.svg';
@@ -22,7 +24,6 @@
   import ArrayIcon from '~icons/material-symbols/data-array-rounded';
   import WarnIcon from '~icons/mingcute/alert-line';
   import ColourIcon from '~icons/tabler/color-filter';
-  import { isColorBlindSafe } from '$lib/helpers/colorBlind.js';
 
   import Swatch from '$lib/components/Swatch.svelte';
   import MultiLineChart from '$lib/components/MultiLineChart.svelte';
@@ -57,6 +58,11 @@
   
   let inputValue = $state("lightyellow, f8f, '#02439e'");
   let inputName = $state('');
+
+  const history = new HistoryState(
+		() => inputValue,          // getter
+		(v) => inputValue = v      // setter
+	);
 
   let numColours = $state(11);
   let colorSpace = $state('lch');
@@ -169,6 +175,24 @@
   let svgRef;
 
  
+  function handleKeydown(e) {
+      const isMod = e.metaKey || e.ctrlKey;
+      const key = e.key.toLowerCase();
+
+      if (isMod) {
+          // UNDO: Cmd+Z or Ctrl+Z
+          if (key === 'z' && !e.shiftKey) {
+              e.preventDefault();
+              history.undo();
+          }
+
+          // REDO: Cmd+Shift+Z, Ctrl+Shift+Z, or Ctrl+Y
+          if ((key === 'z' && e.shiftKey) || key === 'y') {
+              e.preventDefault();
+              history.redo();
+          }
+      }
+  }
 
   let draggingIndex = $state(null);
   let dragOverIndex = $state(null);
@@ -196,6 +220,7 @@
     if (draggingIndex === null || index === null) return;
     
     inputValue = reorderInputColours(inputValue, draggingIndex, index);
+    history.snapshot();
     draggingIndex = null;
     dragOverIndex = null;
   }
@@ -218,12 +243,14 @@
     ];
     
     inputValue = newColours.join(', ');
+    history.snapshot();
   }
 
   function removeColourFromInput(index) {
     const newColours = [...parsedColours];
     newColours.splice(index, 1);
     inputValue = newColours.join(', ');
+    history.snapshot();
   }
 
 
@@ -261,22 +288,26 @@
       .reverse()
       .join(', ');
     inputValue = reversed;
+    history.snapshot();
     showToast(e, 'Input reversed');
   }
 
   function cleanColours(e) {
     inputValue = parsedColours.toString().replace(/,/g, ", ");
+    history.snapshot();
     showToast(e, 'Input cleaned');
   }
 
   function spaceToComma() {
     const commas = inputValue.replace(/\s+/g, ',');
     inputValue = commas;
+    history.snapshot();
   }
 
   function applyTailwindify(e) {
     const newInput = tailwindifyInput(parsedColours);
     inputValue = newInput;
+    history.snapshot();
     showToast(e, 'Input extended');
 
     // transformedColours = tailwindify(parsedColours);
@@ -284,11 +315,13 @@
 
   function clearInput(e) {
     inputValue = '';
+    history.snapshot();
     showToast(e, 'Input cleared');
   }
 
 </script>
 
+<svelte:window onkeydown={handleKeydown} />
 
 <div class="container" class:dark={blackBackground} style="--sel-background: {backgroundColor}">
 
@@ -340,6 +373,7 @@
         bind:value={inputValue}
         placeholder="enter colours separated by commas"
         class="big-input"
+        oninput={() => history.snapshotDebounced()}
       />
     </div>
 
