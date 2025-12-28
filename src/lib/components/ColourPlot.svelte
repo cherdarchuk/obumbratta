@@ -260,10 +260,7 @@
   .tip-text {
     border-radius: 6px;
     background-color: var(--app-100);
-    color: var(--grey-800);
-    padding: 6px 10px;
-    font-size: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    border: 1px solid var(--grey-100);
+    color: var(--app-600);
+    padding: 8px 12px;
   }
 </style>
