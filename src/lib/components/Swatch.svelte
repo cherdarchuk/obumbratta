@@ -67,7 +67,7 @@
     onmouseleave={() => isHovered = false}
     role="button"
     tabindex="0"
-    style="cursor: pointer"
+    style="cursor: {oncopy ? 'pointer' : 'default'}"
   >
 
     <rect {x} {width} height={short ? 36 : 100} fill={colour} rx="8" />
