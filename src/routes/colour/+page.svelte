@@ -439,14 +439,13 @@
     <div class="row">
       <h2>Configuration</h2>
 
-      <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+      <div style="display: flex; flex-direction: row; align-items: center; gap: 10px; width: 100%; max-width: 250px;">
         <label for="name-input" class="small-label desktop-only" style="white-space: nowrap">export name</label>
         <input
           id="name-input"
           type="text"
           bind:value={inputName}
           placeholder={colourNameSuggestion}
-          style="width: 174px;"
           autocomplete="off"
         />
       </div>
@@ -474,7 +473,6 @@
           bind:value={numColours}
           min="2"
           max="20"
-          style="width: 100px;"
         />  
       </div>
 
@@ -485,7 +483,7 @@
     <div class="row">
       <h2>Results</h2>
       <div class="group-of-buttons-w-label">
-        <div class="small-label">export</div>
+        <div class="small-label desktop-only">export</div>
         <div class="button-section">
           <button 
             onclick={(e) => copyToClipboard("['" + transformedColours.toString().replace(/,/g, "', '") + "']",e, "Array")}
@@ -658,13 +656,14 @@
 
   .row {
     display: flex;
-    column-gap: 30px;
+    column-gap: 12px;
     row-gap: 10px;
     align-items: center;
   }
 
   .row.bottom-align {
     align-items: flex-end;
+    justify-content: space-between;
   }
 
   @media (max-width: 990px) {
@@ -724,6 +723,21 @@
     /* resize: vertical; */
   }
 
+  .num-input {
+    width: 100%;
+    max-width: 100px;
+    min-width: 60px;
+  }
+
+  #num-colours {
+    width: 100%;
+  }
+
+  #name-input {
+    width: 100%;
+    max-width: 174px;
+    min-width: 60px;
+  }
 
 
   button {
