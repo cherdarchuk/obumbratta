@@ -62,7 +62,7 @@
 <style>
   .container {
     max-width: 1600px;
-    margin: 70px auto 40px;
+    margin: 0 auto 40px;
     padding: 0 40px;
   }
   .mq-mobile.container {
