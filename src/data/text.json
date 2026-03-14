@@ -108,14 +108,22 @@
       "client": "Darkhorse Analytics",
       "link": "https://www.darkhorseanalytics.com/portfolio-data-looks-better-naked",
       "link_text": "View Project",
-      "video": "data-naked.png",
-      "alt": "Before and after visual of a simple bar chart plotting the calories per 100g of  5 different foods. The first chart has lots of distracting colours, lines, and redundant elements. The second is stripped down and much cleaner and easier to read.",
+      "video": "datalooksbetternaked.gif",
+      "alt": "Animated visual of a simple bar chart plotting the calories per 100g of  5 different foods. The first chart has lots of distracting colours, lines, and redundant elements. The chart is progressively simplified by removing unnecessary elements resulting in a stripped down and much cleaner and easier to read visual.",
       "analysis": "1",
       "design": "10",
       "code": "1"
     }
   ],
   "moreProjects": [
+    {
+      "name": "ACEs Catalogue",
+      "collab": "for the <b>University of Calgary</b>",
+      "link": "https://catalogue.aceshub.org/",
+      "link_text": "View",
+      "video": "ACEs_catalogue.png",
+      "alt": "A phone on a desktop scrolling through a visualization featuring an animated blob"
+    },
     {
       "name": "US Citizenship Timelines",
       "collab": "with <b>USAFacts</b>",
@@ -184,7 +192,7 @@
     {
       "name": "COVID Employment Swings",
       "collab": "with <b>USAFacts</b>",
-      "link": "https://usafacts.org/data-projects/employment-breakdown",
+      "link": "",
       "link_text": "View",
       "video": "employment-swings.png",
       "alt": "A U-shaped chart showing pre-, mid-, and post-pandemic employment by age in the US"
@@ -192,8 +200,8 @@
     {
       "name": "2022 US Midterm Map",
       "collab": "with <b>USAFacts</b>",
-      "link": "https://usafacts.org/data-projects/2022-midterm-map",
-      "link_text": "View",
+      "link": "",
+      "link_text": "",
       "video": "midterm-map.png",
       "alt": "Map showing different Midterm election boundaries for a location northwest of Los Angeles."
     },

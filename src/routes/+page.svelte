@@ -51,7 +51,16 @@
                 {#each copy.projects as proj, i}
                   <div class='step' class:active={scrollIndex === i} data-index={i}>
                     {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
-                    <div class="video"><img src=/images/{proj.video}  alt={proj.alt}/></div>
+                    <a class="video" href={proj.link} target="_blank">
+                      {#if proj.video.endsWith('.mp4')}
+                        <video width="100%" autoplay muted loop playsinline>
+                          <source src="/images/{proj.video}" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                      {:else}
+                      <img src=/images/{proj.video}  alt={proj.alt}/>
+                      {/if}
+                    </a>
 
                     <div class="descrip">
                       <div class="text">{@html proj.description}</div>
@@ -93,7 +102,16 @@
 
             <div class="active proj-section">
               {#if proj.collab} <div class="collab">{@html proj.collab}</div> {/if}
-              <div class="video"><img src=/images/{proj.video} alt={proj.alt}/></div>
+              <a class="video" href={proj.link} target="_blank">
+                {#if proj.video.endsWith('.mp4')}
+                  <video width="100%" autoplay muted loop playsinline>
+                    <source src="/images/{proj.video}" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                {:else}
+                  <img src=/images/{proj.video} alt={proj.alt}/>
+                {/if}
+              </a>
 
               <div class="descrip">
                 <div class="text">{@html proj.description}</div>
@@ -121,7 +139,7 @@
       {#each copy.moreProjects as proj}
         <div class="small-project">
           <div class="collab">{@html proj.collab ? proj.collab : " "}</div>
-          <div class="video">
+          <a class="video" class:noclick={proj.link === ""} href={proj.link} target="_blank">
             {#if proj.video.endsWith('.mp4')}
               <video width="100%" autoplay muted loop playsinline>
                 <source src="/images/{proj.video}" type="video/mp4">
@@ -130,14 +148,14 @@
             {:else}
               <img src=/images/{proj.video} alt={proj.alt}/>
             {/if}
-          </div>
+          </a>
 
           <div class="descrip">
             <div class="text small">{@html proj.name}</div>
             {#if proj.badge} 
               <div class="badge"><img src="images/{proj.badge}" alt={proj.badge_alt}/></div>
             {/if}
-            <a class="proj-link small" href={proj.link} target="_blank">
+            <a class="proj-link small" style:visibility={proj.link ? 'visible' : 'hidden'} href={proj.link} target="_blank">
                 <svg style:transform="translateY(-1px)" height="12" viewBox="0 0 8 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M0 10L4 0H8L4 10H0Z" fill="var(--highlight-colour)"/>
                 </svg> 
@@ -388,6 +406,9 @@
     width: 100%;
     overflow: hidden;
     border-radius: 4px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
   }
   .video img,
   .video video {
@@ -484,6 +505,11 @@
 
   .small-project .video {
     aspect-ratio: 16 / 9;
+  }
+
+  .noclick {
+    pointer-events: none;
+    cursor: default;
   }
 
 
