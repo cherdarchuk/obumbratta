@@ -117,12 +117,20 @@
   ],
   "moreProjects": [
     {
+      "name": "US Congressional Sessions",
+      "collab": "with <b>USAFacts</b>",
+      "link": "https://usafacts.org/articles/congressional-time-in-session/",
+      "link_text": "View",
+      "video": "congressional-calendar.png",
+      "alt": "A partial screenshot of a visual featuring calendars for the house and senate coloured to represent the length of a session on that day. Annotated text from Aug 1-31 reads: Both the House and Senate typically break over August. During election years they break over October as well."
+    },
+    {
       "name": "ACEs Catalogue",
       "collab": "for the <b>University of Calgary</b>",
       "link": "https://catalogue.aceshub.org/",
       "link_text": "View",
       "video": "ACEs_catalogue.png",
-      "alt": "A phone on a desktop scrolling through a visualization featuring an animated blob"
+      "alt": "A bar chart showing the number of articles in the catalogue for different categories of adverse childhood experiences"
     },
     {
       "name": "US Citizenship Timelines",
@@ -130,7 +138,7 @@
       "link": "https://usafacts.org/articles/how-long-can-it-take-to-become-a-us-citizen/",
       "link_text": "View",
       "video": "ribbons.png",
-      "alt": "A phone on a desktop scrolling through a visualization featuring an animated blob"
+      "alt": "A partial screenshot of a visual featuring ribbons representing how long different groups spend in the different phases of the citizenship process"
     },
     {
       "name": "Visualizing CPPs Net-Zero Commitment",
