@@ -231,11 +231,19 @@
     },
     {
       "name": "A Better Mortgage Calculator",
-      "collab": "with <b>Darkhorse Analytics</b>",
+      "collab": "for <b>Darkhorse Analytics</b>",
       "link": "https://mortgage.darkhorseanalytics.com/",
       "link_text": "View",
       "video": "mortgage.png",
       "alt": "A screenshot of the mortgage calculator showing \"what will my payments be\" with sliders for borrowing amount, interest rate, and year paid down over."
+    },
+    {
+      "name": "Hockey Impact",
+      "collab": "for <b>Darkhorse Analytics</b>",
+      "link": "https://hockeyimpact.darkhorseanalytics.com/",
+      "link_text": "View",
+      "video": "hockey.png",
+      "alt": "A screenshot of the hockey impact visual showing teams stacked according to their payroll rank for several year with the center anchored to the team that won the Stanley Cup that year."
     }
   ],
   "threads_title": "Social Media Threads",
