@@ -290,7 +290,7 @@
       "img": "naked-map.webp",
       "alt": "Animated visual showing how to improve the formatting of your choropleth maps. Remove special effects, desaturate the basemap, clip the basemap, remove borders, don't use a rainbow colour scale, class your data colours. Each step is illustrated with a map of fake data titled Support for the Anti-Bacon",
       "link": "https://darkhorsevisualization.com/blog/data-looks-better-naked-maps-edition",
-      "link_text": "view original blog postAgenda."
+      "link_text": "view original blog post"
     },
     {
       "title": "Pie Charts",
