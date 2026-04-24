@@ -106,7 +106,7 @@
       "name": "Data Looks Better Naked",
       "description": "A series of <b>animated visuals</b> outlining guidelines for making your visuals more effective and attractive.",
       "client": "Darkhorse Analytics",
-      "link": "https://www.darkhorseanalytics.com/portfolio-data-looks-better-naked",
+      "link": "https://www.obumbratta.com/naked-data/",
       "link_text": "View Project",
       "video": "datalooksbetternaked.gif",
       "alt": "Animated visual of a simple bar chart plotting the calories per 100g of  5 different foods. The first chart has lots of distracting colours, lines, and redundant elements. The chart is progressively simplified by removing unnecessary elements resulting in a stripped down and much cleaner and easier to read visual.",
@@ -116,6 +116,13 @@
     }
   ],
   "moreProjects": [
+    {
+      "name": "Colour Palette Tool",
+      "link": "https://obumbratta.com/colour",
+      "link_text": "View",
+      "video": "colour-tool.png",
+      "alt": "A video of the colour palette tool. Shows a set of 11 colour swatches interpolated from 3 colours. Below it cycles through different views: a step chart of perceptual lightness, a colour plot of the colour space, colour blindness simulations, contrast ratios, sample visualization elements, and sample UI elements."
+    },
     {
       "name": "US Congressional Sessions",
       "collab": "with <b>USAFacts</b>",
@@ -230,7 +237,7 @@
       "alt": "A screenshot of the thunder roads lightning plot visualization where you can see a red line representing Max Verstappen winning the race in Bahrain."
     },
     {
-      "name": "A Better Mortgage Calculator",
+      "name": "Mortgage Calculator",
       "collab": "for <b>Darkhorse Analytics</b>",
       "link": "https://mortgage.darkhorseanalytics.com/",
       "link_text": "View",
@@ -259,6 +266,38 @@
     {
       "title": "Visualization Tips and Redesigns",
       "embed": "<blockquote class=\"bluesky-embed\" data-bluesky-uri=\"at://did:plc:jt65vu3tx736jruey6fx2hs2/app.bsky.feed.post/3mcxspq64vk2w\" data-bluesky-cid=\"bafyreib5wnyp5ta6d36ekqwlp6feaufopx4ulmdxi3g3mt2nm53tqzbdua\" data-bluesky-embed-color-mode=\"system\"><p lang=\"en\">A thread with all my data visualization tips and redesigns."
+    }
+  ],
+  "nakedData_title": "Data Looks Better Naked",
+  "nakedData_desc": "Collecting the full series of animated visuals I created while at Darkhorse Analytics.",
+  "nakedData": [
+    {
+      "title": "Bar Charts",
+      "img": "datalooksbetternaked.gif",
+      "alt": "Animated visual of a simple bar chart plotting the calories per 100g of  5 different foods. The first chart has lots of distracting colours, lines, and redundant elements. The chart is progressively simplified by removing unnecessary elements resulting in a stripped down and much cleaner and easier to read visual.",
+      "link": "https://darkhorsevisualization.com/blog/data-looks-better-naked",
+      "link_text": "view original blog post"
+    },
+    {
+      "title": "Data Tables",
+      "img": "clear-off-the-table.gif",
+      "alt": "Animated visual showing how to improve the formatting of your data tables. It starts with a table of fake wrestling states formatted similar to one of Excel's many styling options which. Progressive deletions and alignment and formatting improvements deliver a clearer and more compelling data table.",
+      "link": "https://darkhorsevisualization.com/blog/clear-off-the-table",
+      "link_text": "view original blog post"
+    },
+    {
+      "title": "Choropleth Maps",
+      "img": "naked-map.webp",
+      "alt": "Animated visual showing how to improve the formatting of your choropleth maps. Remove special effects, desaturate the basemap, clip the basemap, remove borders, don't use a rainbow colour scale, class your data colours. Each step is illustrated with a map of fake data titled Support for the Anti-Bacon",
+      "link": "https://darkhorsevisualization.com/blog/data-looks-better-naked-maps-edition",
+      "link_text": "view original blog postAgenda."
+    },
+    {
+      "title": "Pie Charts",
+      "img": "salvaging-the-pie.webp",
+      "alt": "Animated visual showing how to improve your pie charts by removing the 3rd dimension, reducing colors, removing redundant labels, and then the punchline, the wedges of the pie are removed and the label leader lines are thicken turning it into a bar chart instead.",
+      "link": "https://darkhorsevisualization.com/blog/clear-off-the-table",
+      "link_text": "view original blog post"
     }
   ]
 }

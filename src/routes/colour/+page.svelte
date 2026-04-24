@@ -834,6 +834,8 @@
   .small-label {
     font-size:12px; 
     color:var(--app-500);
+    display: block;
+    line-height: 1.15em;
   }
 
 
