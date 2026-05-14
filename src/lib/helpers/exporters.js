@@ -35,7 +35,8 @@ export function convertCssVariables(cssVariables) {
   //                        - This matches '-50' or '-100' and CAPTURES the number ([0-9]+)
   //    :\s* -> Match the colon and any following whitespace
   //    (#[a-fA-F0-9]+)   -> Capture the hex color code
-  const regex = /--([a-z]+)(?:-([a-zA-Z0-9]+))?:\s*(#[a-fA-F0-9]+);?/i
+  // Support names like --violet-100 and --light-pink-100.
+  const regex = /--([a-z][a-z0-9-]*?)(?:-([0-9]+))?:\s*(#[a-fA-F0-9]+);?/i
 
   // 3. Process and map each line
   const convertedLines = lines.map(line => {
