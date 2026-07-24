@@ -117,6 +117,30 @@
   ],
   "moreProjects": [
     {
+      "name": "US Supreme Court Tenure",
+      "collab": "with <b>USAFacts</b>",
+      "link": "https://usafacts.org/articles/the-viz-lab/supreme-court-tenure/",
+      "link_text": "View",
+      "video": "court_tenure.mp4",
+      "alt": "A partial screenshot of a visual featuring bars representing the supreme court justices tenure on the cour. The bars are coloured according the the colour of the party that nominated them. The bars animate between an annotated version with all bars on the left and a version where the bars are clustered according to the political party."
+    },
+    {
+      "name": "Midterm Election Dropoff",
+      "collab": "with <b>USAFacts</b>",
+      "link": "https://usafacts.org/articles/who-shows-up-to-the-midterms/",
+      "link_text": "View",
+      "video": "midterm_dropoff.png",
+      "alt": "A tile map of the US with one square for each state. Inside each square is an arrow representing the the turnout for the 2020 presidential and 2022 midterm election, showing how far it dropped from one to the other. A small square represents the turnout in the 2024 presidential election."
+    },
+    {
+      "name": "ACEs Prevalence",
+      "collab": "for the <b>University of Calgary</b>",
+      "link": "https://prevalence.aceshub.org/",
+      "link_text": "View",
+      "video": "ACEs_prevalence.png",
+      "alt": "A dot plot showing the prevalence of different adverse childhood experiences with ranges for uncertainty."
+    },
+    {
       "name": "Colour Palette Tool",
       "link": "https://obumbratta.com/colour",
       "link_text": "View",
