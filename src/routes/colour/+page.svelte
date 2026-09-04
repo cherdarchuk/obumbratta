@@ -586,6 +586,7 @@
 
     {:else if resultsView === 'credits'}
       <div class="credits">
+        <p>This tool was created by Joey Cherdarchuk of <a href="https://obumbratta.com" target="_blank" rel="noopener noreferrer">Obumbratta Interactive Data Visualization</a>.</p>
         <p>Gregor Aisch's <a href="https://gka.github.io/palettes" target="_blank" >Color Palette Helper</a> inspired this tool and his <a href="https://gka.github.io/chroma.js/" target="_blank" rel="noopener noreferrer">Chroma.js</a> powers it.</p>
         <p>Single colour palette generation intialized with Brian Wendt's <a href="https://github.com/wendtcode/uicolors-generator" target="_blank" rel="noopener noreferrer">UI Colors Generator</a></p>
         <p>Colour blindness simulation adapted from the function by Matthew Wickline and the <a href="http://hcirn.com/" target="_blank" rel="noopener noreferrer">HCIRN</a>.</p>
