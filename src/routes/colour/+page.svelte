@@ -16,7 +16,7 @@
   import { getCSS, convertCssVariables } from '$lib/helpers/exporters.js';
   import { isColorBlindSafe } from '$lib/helpers/colorBlind.js';
   import { HistoryState } from '$lib/helpers/history.svelte.js';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { page } from '$app/state';
   import { generateUrl } from '$lib/helpers/deepLink.svelte.js';
 
@@ -139,6 +139,13 @@
       document.body.style.removeProperty('--sel-background');
       document.body.style.removeProperty('--back-colour');
     }
+  });
+
+  // Ensure body styles are cleaned up when navigating away from this page
+  onDestroy(() => {
+    document.body.classList.remove('page-black-bg');
+    document.body.style.removeProperty('--sel-background');
+    document.body.style.removeProperty('--back-colour');
   });
 
 
