@@ -589,7 +589,7 @@
         <p>Created by Joey Cherdarchuk of <a href="https://obumbratta.com" target="_blank" rel="noopener noreferrer">Obumbratta Interactive Data Visualization</a></p>
         <p>Gregor Aisch's <a href="https://gka.github.io/palettes" target="_blank" >Color Palette Helper</a> inspired this tool and his <a href="https://gka.github.io/chroma.js/" target="_blank" rel="noopener noreferrer">Chroma.js</a> powers it</p>
         <p>Single colour palette generation intialized with Brian Wendt's <a href="https://github.com/wendtcode/uicolors-generator" target="_blank" rel="noopener noreferrer">UI Colors Generator</a></p>
-        <p>Colour blindness simulation adapted from the function by Matthew Wickline and the <a href="http://hcirn.com/" target="_blank" rel="noopener noreferrer">HCIRN</a>.</p>
+        <p>Colour blindness simulation adapted from the function by Matthew Wickline and the <a href="http://hcirn.com/" target="_blank" rel="noopener noreferrer">HCIRN</a></p>
         <p>Some sample visuals created with <a href="https://rawgraphs.io/" target="_blank" rel="noopener noreferrer">RawGraphs</a></p>
         <p>Squirrel photo by <a href="https://unsplash.com/@sparrow24?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank" rel="noopener noreferrer">Włodzimierz Jaworski</a> on <a href="https://unsplash.com/photos/brown-squirrel-on-brown-dried-leaves-during-daytime-NPm7lIxltP8?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" target="_blank">Unsplash</a></p>
         <p>Animated clock based on this <a href="https://svelte.dev/playground/270e83f43e7a48918d8f2d497760904f?version=3.32.1" target="_blank" rel="noopener noreferrer">Svelte Playground</a></p>
