@@ -18,6 +18,7 @@
   import { HistoryState } from '$lib/helpers/history.svelte.js';
   import { onMount, onDestroy } from 'svelte';
   import { page } from '$app/state';
+  import { browser } from '$app/environment';
   import { generateUrl } from '$lib/helpers/deepLink.svelte.js';
 
 
@@ -118,35 +119,7 @@
 
 
   // let appColours = $derived(getTailwindColors(backgroundColor, {asHex: true}));
-
-  // Toggle a body class so this page can force a black background independent of +layout
-  $effect(() => {
-    // Set CSS variables on body to control global background and header color
-    document.body.style.setProperty('--sel-background', backgroundColor);
-    
-    if (blackBackground) {
-      document.body.classList.add('page-black-bg');
-      // Override header background color (which uses --back-colour)
-      document.body.style.setProperty('--back-colour', 'var(--grey-900)');
-    } else {
-      document.body.classList.remove('page-black-bg');
-      // Ensure header matches the white page background
-      document.body.style.setProperty('--back-colour', '#ffffff');
-    }
-
-    return () => {
-      document.body.classList.remove('page-black-bg');
-      document.body.style.removeProperty('--sel-background');
-      document.body.style.removeProperty('--back-colour');
-    }
-  });
-
-  // Ensure body styles are cleaned up when navigating away from this page
-  onDestroy(() => {
-    document.body.classList.remove('page-black-bg');
-    document.body.style.removeProperty('--sel-background');
-    document.body.style.removeProperty('--back-colour');
-  });
+  // No longer apply styles to body - keep them scoped to the page container
 
 
   let parsedNames = $derived(nameParse(inputValue));
@@ -353,7 +326,22 @@
 
 <svelte:window onkeydown={handleKeydown} />
 
-<div class="container" class:dark={blackBackground} style="--sel-background: {backgroundColor}">
+<!-- Local header for colour page with scoped background styling -->
+<div class="colour-page-header" style="--header-bg: {blackBackground ? 'var(--grey-900)' : '#ffffff'}">
+  <div class="header-content">
+    <div></div>
+    <a href="/" style="cursor: pointer;" aria-label="Home">
+      <svg width="57" height="36" viewBox="0 0 57 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M39 1H25L13.48 35.2H27.48L39 1Z" fill="#BDB897"/>
+        <path d="M57 1H43L31.48 35.2H45.48L57 1Z" fill="#BDB897"/>
+      </svg>
+    </a>
+    <nav class="menu"></nav>
+  </div>
+</div>
+
+<div class="colour-page-wrapper" style="--sel-background: {backgroundColor}">
+  <div class="container" class:dark={blackBackground}>
 
   <div class="box">
     <div class="row">
@@ -615,6 +603,7 @@
   </div>
 
 </div>
+</div>
 
 {#if toastOn && toastEvent}
   <div class="toast-wrapper" class:dark={blackBackground} transition:fade={{ duration: 200 }}>
@@ -639,16 +628,6 @@
 
 <style>
 
-
-  :global(body) {
-    background-color: var(--sel-background);
-  }
-
-  /* When this page toggles black background, override layout using a body class */
-  :global(body.page-black-bg) {
-    background-color: #000 !important;
-  }
-
   .credits {
     min-height: 200px;
     box-shadow: 0 0 0 1px var(--app-50), 0 10px 15px -3px rgba(0, 0, 0, .05), 0 4px 6px -4px rgba(0, 0, 0, .05);
@@ -672,6 +651,7 @@
   .row.bottom-align {
     align-items: flex-end;
     justify-content: space-between;
+    flex-wrap: nowrap;
   }
 
   @media (max-width: 990px) {
@@ -817,9 +797,18 @@
     flex-direction: column;
     gap: 20px;
     max-width: 1080px;
+    width: 100%;
     margin: 0 auto 0px;
     padding: 20px;
+  }
+
+  /* Full-width background for the entire page */
+  .colour-page-wrapper {
+    min-height: calc(100vh - 70px);
     background-color: var(--sel-background);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
 
@@ -910,11 +899,44 @@
   }
 
   @media (max-width: 900px) {
-  .viz-examples {
-    justify-content: start; 
-    gap: 16px; /* Cap the gap */
+    .viz-examples {
+      justify-content: start; 
+      gap: 16px; /* Cap the gap */
+    }
   }
-}
 
+  /* Local header for colour page - keeps background override scoped */
+  .colour-page-header {
+    position: relative;
+    width: 100%;
+    z-index: 10;
+    background-color: var(--header-bg);
+  }
+
+  .colour-page-header .header-content {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+    max-width: 1600px;
+    margin: auto;
+    padding: 0 40px;
+    width: 100%;
+    z-index: 2;
+    background-color: var(--header-bg);
+  }
+
+  .colour-page-header .menu {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    gap: 30px;
+    min-width: 20px;
+  }
+
+  .colour-page-header div {
+    min-width: 20px;
+  }
 
 </style>

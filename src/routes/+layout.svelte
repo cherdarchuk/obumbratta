@@ -1,11 +1,19 @@
 <script>
 	import '$lib/styles/normalize.css';
 	import '$lib/styles/app.css';
+	import { page } from '$app/stores';
+	import { browser } from '$app/environment';
 
   let {children} = $props();
+  
+  // Check if we're on the colour page
+  let isColourPage = $derived($page.route.id?.includes('colour') ?? false);
+  
+
 </script>
 
 
+{#if !isColourPage}
 <div class="full-width">
   <div class="header">
     <!-- <div><a href="#home">Home</a></div> -->
@@ -22,6 +30,7 @@
     </nav>
   </div>
 </div>
+{/if}
 
 
 {@render children()}
