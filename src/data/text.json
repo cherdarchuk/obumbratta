@@ -141,11 +141,11 @@
       "alt": "A dot plot showing the prevalence of different adverse childhood experiences with ranges for uncertainty."
     },
     {
-      "name": "Colour Palette Tool",
-      "link": "https://obumbratta.com/colour",
+      "name": "Chromatta",
+      "link": "https://obumbratta.com/chromatta",
       "link_text": "View",
       "video": "colour-tool.png",
-      "alt": "A video of the colour palette tool. Shows a set of 11 colour swatches interpolated from 3 colours. Below it cycles through different views: a step chart of perceptual lightness, a colour plot of the colour space, colour blindness simulations, contrast ratios, sample visualization elements, and sample UI elements."
+      "alt": "A video of the Chromatta colour palette tool. Shows a set of 11 colour swatches interpolated from 3 colours. Below it cycles through different views: a step chart of perceptual lightness, a colour plot of the colour space, colour blindness simulations, contrast ratios, sample visualization elements, and sample UI elements."
     },
     {
       "name": "US Congressional Sessions",
