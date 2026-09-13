@@ -7,7 +7,7 @@
   let {children} = $props();
   
   // Check if we're on the colour page
-  let isColourPage = $derived($page.route.id?.includes('colour') ?? false);
+  let isColourPage = $derived($page.route.id?.includes('chromatta') ?? false);
   
 
 </script>

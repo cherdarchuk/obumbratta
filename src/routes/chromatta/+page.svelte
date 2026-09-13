@@ -327,16 +327,16 @@
 <svelte:window onkeydown={handleKeydown} />
 
 <!-- Local header for colour page with scoped background styling -->
-<div class="colour-page-header" style="--header-bg: {blackBackground ? 'var(--grey-900)' : '#ffffff'}">
+<div class="colour-page-header" class:dark={blackBackground} style="--header-bg: {blackBackground ? 'var(--grey-900)' : '#ffffff'}">
   <div class="header-content">
-    <div></div>
+    <h2>Chromatta</h2>
     <a href="/" style="cursor: pointer;" aria-label="Home">
       <svg width="57" height="36" viewBox="0 0 57 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M39 1H25L13.48 35.2H27.48L39 1Z" fill="#BDB897"/>
         <path d="M57 1H43L31.48 35.2H45.48L57 1Z" fill="#BDB897"/>
       </svg>
     </a>
-    <nav class="menu"></nav>
+    <div class="small-label"><a href="https://obumbratta.com" target="_blank">by Obumbratta</a></div>
   </div>
 </div>
 
@@ -758,7 +758,7 @@
     gap: 10px;
   }
 
-  .container, .toast-wrapper {
+  .container, .toast-wrapper, .colour-page-header {
     --app-50: var(--brown-50);
     --app-100: var(--brown-100);
     --app-200: var(--brown-200);
@@ -775,7 +775,7 @@
     --chart-background: rgba(0, 0, 0, 0.03);
   }
 
-  .container.dark, .toast-wrapper.dark {
+  .container.dark, .toast-wrapper.dark, .colour-page-header.dark {
     --app-50: var(--brown-900);
     --app-100: var(--brown-800);
     --app-200: var(--brown-700);
@@ -919,24 +919,27 @@
     justify-content: space-between;
     align-items: center;
     height: 70px;
-    max-width: 1600px;
-    margin: auto;
+    max-width: 1080px;
+    margin: auto; 
     padding: 0 40px;
     width: 100%;
     z-index: 2;
     background-color: var(--header-bg);
   }
 
-  .colour-page-header .menu {
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    gap: 30px;
-    min-width: 20px;
+  .colour-page-header .header-content h2 {
+    width: fit-content;
+    font-size: 16px;
+    min-width: 115px;
   }
 
   .colour-page-header div {
     min-width: 20px;
+  }
+
+  .colour-page-header .header-content .small-label {
+    min-width: 115px;
+    text-align: right;
   }
 
 </style>
