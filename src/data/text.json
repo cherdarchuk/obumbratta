@@ -182,8 +182,7 @@
     {
       "name": "Exploring the US Budget",
       "collab": "with <b>USAFacts</b>",
-      "link": "https://usafacts.org/government-spending/",
-      "altlink": "https://usafacts.org/articles/this-chart-tells-you-everything-you-want-to-know-about-government-spending/",
+      "link": "https://usafacts.org/articles/this-chart-tells-you-everything-you-want-to-know-about-government-spending/",
       "link_text": "View",
       "video": "budget-sankey.png",
       "alt": "A sankey diagram looking at US spending vs revenue."
